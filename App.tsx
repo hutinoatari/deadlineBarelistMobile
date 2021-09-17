@@ -1,13 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, SafeAreaView, StatusBar, Text, Button, View } from 'react-native';
 
 const App: FC<{}> = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={{
+      flex: 1,
+      paddingTop: StatusBar.currentHeight,
+      width: "100%",
+    }}>
+      <ExpoStatusBar />
+
+      <View style={{
+        backgroundColor: "#ffaaaa",
+        alignItems: "center",
+      }}>
+        <Text>期限ギリギリスト</Text>
+      </View>
+
+      <View style={{
+        flexDirection: "row",
+        backgroundColor: "#aaffaa",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <Button title="リスト" onPress={() => {}} />
+        <Text>・</Text>
+        <Button title="定期リスト" onPress={() => {}} />
+      </View>
+
+      <View style={{
+        backgroundColor: "#aaaaff",
+      }}>
+        <Text>タスク追加</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
