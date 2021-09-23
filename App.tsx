@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
 import { TaskData } from "./types/data";
-import { UNIXDateToYYYYMMDD } from "./utils/util";
+import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([{name: "a",deadline: 0,isDone: false,}]);
@@ -59,7 +59,7 @@ const App: FC<{}> = () => {
                         {taskDatas.map((taskData: TaskData, i: number) => 
                             <Row key={i}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
-                                <Cell><Text>{UNIXDateToYYYYMMDD(taskData.deadline)}</Text></Cell>
+                                <Cell><Text>{UNIXTimeToYYYYMMDD(taskData.deadline)}</Text></Cell>
                                 <Cell><Text>{taskData.isDone ? "o" : "x"}</Text></Cell>
                                 <Cell><Button title="完了" onPress={() => {}} /></Cell>
                                 <Cell><Button title="削除" onPress={() => {}} /></Cell>
