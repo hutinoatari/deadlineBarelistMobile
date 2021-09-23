@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { StyleSheet, Modal, Text, TextInput, Button, View, Alert } from 'react-native';
 import { TaskData } from "../types/data";
-import { UNIXTimeToYYYYMMDD } from "../utils/util";
+import { UNIXTimeToYYYYMMDD, generateRandomString } from "../utils/util";
 
 interface Props {
     visible: boolean;
@@ -29,7 +29,7 @@ const TaskModal: FC<Props> = ({
             <View style={{
                 backgroundColor: "#aaaaff",
             }}>
-                <Text>タスク追加</Text>
+                <Text>課題追加</Text>
                 <View style={{
                     flexDirection: "row",
                 }}>
@@ -94,6 +94,7 @@ const TaskModal: FC<Props> = ({
                     if(taskNamestring.trim()!=="" && !isNaN(yearNumber) && !isNaN(monthNumber) && !isNaN(dateNumber)){
                         const UNIXTime = new Date(yearNumber, monthNumber, dateNumber).getTime();
                         addTask({
+                            id: generateRandomString(),
                             name: taskNamestring,
                             deadline: UNIXTime,
                             isDone: false,

@@ -6,6 +6,7 @@ import { Table, Row, Cell } from "./components/Table";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
+import SettingModal from "./components/SettingModal";
 import { TaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
@@ -16,7 +17,16 @@ const App: FC<{}> = () => {
         tmpArray.push(newTaskData);
         setTaskDatas(tmpArray);
     }
+    const deleteTask = (id: string) => {
+        const newData = taskDatas.filter((e) => e.id !== id);
+        setTaskDatas(newData);
+    }
+    const dataClear = () => {
+        setTaskDatas([]);
+        AsyncStorage.clear();
+    };
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
+    const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         AsyncStorage.getItem("task").then((json) => {
@@ -42,11 +52,15 @@ const App: FC<{}> = () => {
                 alignItems: "center",
                 justifyContent: "center",
             }}>
-                <Button title="タスク追加" onPress={() => {
+                <Button title="課題追加" onPress={() => {
                     setTaskModalVisible(true);
                 }} />
                 <Text>・</Text>
-                <Button title="定期タスクリスト" onPress={() => {}} disabled />
+                <Button title="定期課題リスト" onPress={() => {}} disabled />
+                <Text>・</Text>
+                <Button title="設定" onPress={() => {
+                    setSettingModalVisible(true);
+                }} />
             </View>
 
             <View style={{
@@ -61,18 +75,23 @@ const App: FC<{}> = () => {
                             <Cell><Text>名前</Text></Cell>
                             <Cell><Text>期限</Text></Cell>
                             <Cell><Text>状態</Text></Cell>
-                            <Cell><Text>完了</Text></Cell>
                             <Cell><Text>削除</Text></Cell>
                         </Row>
                     </Table>
                     <Table>
-                        {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData, i: number) => 
-                            <Row key={i}>
+                        {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) => 
+                            <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
                                 <Cell><Text>{UNIXTimeToYYYYMMDD(taskData.deadline)}</Text></Cell>
-                                <Cell><Text>{taskData.isDone ? "o" : "x"}</Text></Cell>
-                                <Cell><Button title="完了" onPress={() => {}} /></Cell>
-                                <Cell><Button title="削除" onPress={() => {}} /></Cell>
+                                <Cell>
+                                    <View style={{flexDirection: "row"}}>
+                                        <Text>{taskData.isDone ? "完" : "未"}</Text>
+                                        <View style={{flex: 1}}>
+                                            <Button title="変更" onPress={() => {}} />
+                                        </View>
+                                    </View>
+                                </Cell>
+                                <Cell><Button title="削除" onPress={() => deleteTask(taskData.id)} color="red" /></Cell>
                             </Row>
                         )}
                     </Table>
@@ -87,6 +106,14 @@ const App: FC<{}> = () => {
                     setTaskModalVisible(false);
                 }}
                 addTask={addTask}
+            />
+
+            <SettingModal
+                visible={settingModalVisible}
+                onRequestClose={() => {
+                    setSettingModalVisible(false);
+                }}
+                dataClear={dataClear}
             />
         </SafeAreaView>
     );

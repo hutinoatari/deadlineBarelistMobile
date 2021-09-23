@@ -1,3 +1,5 @@
+const rand = (n: number): number => Math.floor(Math.random() * n);
+
 const UNIXTimeToYYYYMMDD = (UNIXTime: number): string => {
     const date = new Date(UNIXTime);
     const y = date.getFullYear();
@@ -7,4 +9,10 @@ const UNIXTimeToYYYYMMDD = (UNIXTime: number): string => {
     return YYYYMMDD;
 }
 
-export { UNIXTimeToYYYYMMDD };
+const generateRandomString = (): string => {
+    const charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const randomString = new Array(32).fill(undefined).map(() => charList[rand(charList.length)]).join("");
+    return randomString;
+}
+
+export { UNIXTimeToYYYYMMDD, generateRandomString };
