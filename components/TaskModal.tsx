@@ -1,19 +1,23 @@
 import React, { FC } from 'react';
 import { StyleSheet, Modal, Text, TextInput, Button, View } from 'react-native';
+import { TaskData } from "../types/data";
 
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
+    addTask: (newTaskData :TaskData) => void;
 }
 
 const TaskModal: FC<Props> = ({
     visible,
     onRequestClose,
+    addTask,
 }) => {
     return (
         <Modal
             visible={visible}
             onRequestClose={onRequestClose}
+            animationType="slide"
         >
             <Button title="閉じる" onPress={onRequestClose} />
             <View style={{
@@ -38,7 +42,9 @@ const TaskModal: FC<Props> = ({
                     <Text>2021/9/18</Text>
                     <Button title="日付選択" onPress={() => {}} />
                 </View>
-                <Button title="追加する" onPress={() => {}} />
+                <Button title="追加する" onPress={() => {
+                    //addTask();
+                }} />
             </View>
         </Modal>
     );

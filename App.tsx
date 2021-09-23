@@ -2,9 +2,19 @@ import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC, useState } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Modal, Text, Button, TextInput } from 'react-native';
 import { Table, Row, Cell } from "./components/Table";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
+import { TaskData } from "./types/data";
+import { UNIXDateToYYYYMMDD } from "./utils/util";
 
 const App: FC<{}> = () => {
+    const [taskDatas, setTaskDatas] = useState<TaskData[]>([{name: "a",deadline: 0,isDone: false,}]);
+    const addTask = (newTaskData: TaskData): void => {
+        const tmpArray = [...taskDatas];
+        tmpArray.push(newTaskData);
+        setTaskDatas(tmpArray);
+    }
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
 
     return (
@@ -14,12 +24,7 @@ const App: FC<{}> = () => {
         }}>
             <ExpoStatusBar />
 
-            <View style={{
-                backgroundColor: "#ffaaaa",
-                alignItems: "center",
-            }}>
-                <Text>期限ギリギリスト</Text>
-            </View>
+            <Header />
 
             <View style={{
                 flexDirection: "row",
@@ -51,36 +56,27 @@ const App: FC<{}> = () => {
                         </Row>
                     </Table>
                     <Table>
-                        <Row>
-                            <Cell><Text>課題A</Text></Cell>
-                            <Cell><Text>2021/9/18</Text></Cell>
-                            <Cell><Text>x</Text></Cell>
-                            <Cell><Button title="完了" onPress={() => {}} /></Cell>
-                            <Cell><Button title="削除" onPress={() => {}} /></Cell>
-                        </Row>
-                        <Row>
-                            <Cell><Text>課題B</Text></Cell>
-                            <Cell><Text>2021/10/12</Text></Cell>
-                            <Cell><Text>o</Text></Cell>
-                            <Cell><Button title="完了" onPress={() => {}} /></Cell>
-                            <Cell><Button title="削除" onPress={() => {}} /></Cell>
-                        </Row>
+                        {taskDatas.map((taskData: TaskData, i: number) => 
+                            <Row key={i}>
+                                <Cell><Text>{taskData.name}</Text></Cell>
+                                <Cell><Text>{UNIXDateToYYYYMMDD(taskData.deadline)}</Text></Cell>
+                                <Cell><Text>{taskData.isDone ? "o" : "x"}</Text></Cell>
+                                <Cell><Button title="完了" onPress={() => {}} /></Cell>
+                                <Cell><Button title="削除" onPress={() => {}} /></Cell>
+                            </Row>
+                        )}
                     </Table>
                 </ScrollView>
             </View>
 
-            <View style={{
-                backgroundColor: "#ffaaff",
-                alignItems: "center",
-            }}>
-                <Text>(C)2021 淵野アタリ</Text>
-            </View>
+            <Footer />
 
             <TaskModal
                 visible={taskModalVisible}
                 onRequestClose={() => {
                     setTaskModalVisible(false);
                 }}
+                addTask={addTask}
             />
         </SafeAreaView>
     );
