@@ -13,9 +13,7 @@ import { UNIXTimeToYYYYMMDD } from "./utils/util";
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
     const addTask = (newTaskData: TaskData): void => {
-        const tmpArray = [...taskDatas];
-        tmpArray.push(newTaskData);
-        setTaskDatas(tmpArray);
+        setTaskDatas([...taskDatas, newTaskData]);
     }
     const changeDone = (id: string) => {
         const newData = taskDatas.map((taskData: TaskData) => taskData.id === id ? {...taskData, isDone: !taskData.isDone} : taskData);
@@ -74,7 +72,11 @@ const App: FC<{}> = () => {
                 backgroundColor: "#ffffaa",
             }}>
                 <Text>課題リスト</Text>
-                <Button title="更新する" onPress={() => {}} />
+                <Button title="更新する" onPress={() => setTodayUNIXTime(new Date().getTime())} />
+                <Button title="終了済の課題を全削除" onPress={() => {
+                    const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < todayUNIXTime) && taskData.isDone));
+                    setTaskDatas(newData);
+                }} color="red" />
                 <ScrollView>
                     <Table>
                         <Row>
