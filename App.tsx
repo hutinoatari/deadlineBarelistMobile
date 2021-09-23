@@ -17,6 +17,10 @@ const App: FC<{}> = () => {
         tmpArray.push(newTaskData);
         setTaskDatas(tmpArray);
     }
+    const changeDone = (id: string) => {
+        const newData = taskDatas.map((taskData: TaskData) => taskData.id === id ? {...taskData, isDone: !taskData.isDone} : taskData);
+        setTaskDatas(newData);
+    }
     const deleteTask = (id: string) => {
         const newData = taskDatas.filter((e) => e.id !== id);
         setTaskDatas(newData);
@@ -93,7 +97,7 @@ const App: FC<{}> = () => {
                                     <View style={{flexDirection: "row"}}>
                                         <Text>{taskData.isDone ? "完" : "未"}</Text>
                                         <View style={{flex: 1}}>
-                                            <Button title="変更" onPress={() => {}} />
+                                            <Button title="変更" onPress={() => changeDone(taskData.id)} />
                                         </View>
                                     </View>
                                 </Cell>
