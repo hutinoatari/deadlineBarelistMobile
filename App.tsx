@@ -25,6 +25,8 @@ const App: FC<{}> = () => {
         setTaskDatas([]);
         AsyncStorage.clear();
     };
+
+    const [todayUNIXTime, setTodayUNIXTime] = useState<number>(new Date().getTime());
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
@@ -82,7 +84,11 @@ const App: FC<{}> = () => {
                         {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) => 
                             <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
-                                <Cell><Text>{UNIXTimeToYYYYMMDD(taskData.deadline)}</Text></Cell>
+                                <Cell>
+                                    <Text style={{color: ((taskData.deadline < todayUNIXTime) && !taskData.isDone) ? "red" : "black"}}>
+                                        {UNIXTimeToYYYYMMDD(taskData.deadline)}
+                                    </Text>
+                                </Cell>
                                 <Cell>
                                     <View style={{flexDirection: "row"}}>
                                         <Text>{taskData.isDone ? "完" : "未"}</Text>
