@@ -1,9 +1,12 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import React, { FC } from 'react';
-import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Text, Button, TextInput } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Modal, Text, Button, TextInput } from 'react-native';
 import { Table, Row, Cell } from "./components/Table";
+import TaskModal from "./components/TaskModal";
 
 const App: FC<{}> = () => {
+    const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
+
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -24,34 +27,11 @@ const App: FC<{}> = () => {
                 alignItems: "center",
                 justifyContent: "center",
             }}>
-                <Button title="リスト" onPress={() => {}} />
+                <Button title="リスト" onPress={() => {
+                    setTaskModalVisible(true);
+                }} />
                 <Text>・</Text>
-                <Button title="定期リスト" onPress={() => {}} />
-            </View>
-
-            <View style={{
-                backgroundColor: "#aaaaff",
-            }}>
-                <Text>タスク追加</Text>
-                <View style={{
-                    flexDirection: "row",
-                }}>
-                    <Text>名前: </Text>
-                    <TextInput style={{
-                        backgroundColor: "white",
-                        borderWidth: 1,
-                        padding: 0,
-                        flex: 1,
-                    }} />
-                </View>
-                <View style={{
-                    flexDirection: "row",
-                }}>
-                    <Text>期限: </Text>
-                    <Text>2021/9/18</Text>
-                    <Button title="日付選択" onPress={() => {}} />
-                </View>
-                <Button title="追加する" onPress={() => {}} />
+                <Button title="定期リスト" onPress={() => {}} disabled />
             </View>
 
             <View style={{
@@ -95,6 +75,13 @@ const App: FC<{}> = () => {
             }}>
                 <Text>(C)2021 淵野アタリ</Text>
             </View>
+
+            <TaskModal
+                visible={taskModalVisible}
+                onRequestClose={() => {
+                    setTaskModalVisible(false);
+                }}
+            />
         </SafeAreaView>
     );
 }
