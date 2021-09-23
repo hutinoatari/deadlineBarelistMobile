@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, Text, Button, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const Table: FC<{}> = ({children}) => {
     return (

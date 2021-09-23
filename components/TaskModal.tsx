@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { StyleSheet, Modal, Text, TextInput, Button, View, Alert } from 'react-native';
 import { TaskData } from "../types/data";
-import { UNIXTimeToYYYYMMDD, generateRandomString } from "../utils/util";
+import { generateRandomString } from "../utils/util";
 
 interface Props {
     visible: boolean;
@@ -29,7 +29,7 @@ const TaskModal: FC<Props> = ({
             <View style={{
                 backgroundColor: "#aaaaff",
             }}>
-                <Text>課題追加</Text>
+                <Text style={{fontWeight: "bold"}}>課題追加</Text>
                 <View style={{
                     flexDirection: "row",
                 }}>

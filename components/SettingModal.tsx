@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, Modal, Text, TextInput, Button, View, Alert } from 'react-native';
+import { StyleSheet, Modal, Text, Button, View, Alert } from 'react-native';
 
 interface Props {
     visible: boolean;
@@ -22,7 +22,7 @@ const SettingModal: FC<Props> = ({
             <View style={{
                 backgroundColor: "#aaaaff",
             }}>
-                <Text>設定</Text>
+                <Text style={{fontWeight: "bold"}}>設定</Text>
                 <Button title="キャッシュを含めて全削除" onPress={dataClear} color="red" />
             </View>
         </Modal>
