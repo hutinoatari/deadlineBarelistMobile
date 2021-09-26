@@ -119,7 +119,7 @@ const EveryTaskModal: FC<Props> = ({
                 </Table>
                 <ScrollView>
                     <Table>
-                        {everyTaskDatas.sort((a: EveryTaskData, b: EveryTaskData) => a.addDay - b.addDay).map((everyTaskData: EveryTaskData) =>
+                        {everyTaskDatas.map((everyTaskData: EveryTaskData) =>
                             <Row key={everyTaskData.id}>
                                 <Cell><Text>{everyTaskData.name}</Text></Cell>
                                 <Cell><Text>{dayString[everyTaskData.addDay]}</Text></Cell>

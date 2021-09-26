@@ -13,10 +13,11 @@ import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
-    //const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
     const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
     const addTask = (newTaskData: TaskData): void => {
-        setTaskDatas([...taskDatas, newTaskData]);
+        const newTaskDatas = [...taskDatas, newTaskData];
+        const sortedNewTaskDatas = newTaskDatas.sort((a, b) => a.deadline - b.deadline);
+        setTaskDatas(sortedNewTaskDatas);
     }
     const changeDone = (id: string) => {
         const newData = taskDatas.map((taskData: TaskData) => taskData.id === id ? {...taskData, isDone: !taskData.isDone} : taskData);
@@ -27,7 +28,9 @@ const App: FC<{}> = () => {
         setTaskDatas(newData);
     }
     const addEveryTask = (newEveryTaskData: EveryTaskData): void => {
-        setEveryTaskDatas([...everyTaskDatas, newEveryTaskData]);
+        const newEveryDataTasks = [...everyTaskDatas, newEveryTaskData];
+        const sortedNewEveryDataTasks = newEveryDataTasks.sort((a, b) => a.addDay - b.addDay);
+        setEveryTaskDatas(sortedNewEveryDataTasks);
     }
     const deleteEveryTask = (id: string) => {
         const newData = everyTaskDatas.filter((e) => e.id !== id);
@@ -117,7 +120,7 @@ const App: FC<{}> = () => {
                 </Table>
                 <ScrollView>
                     <Table>
-                        {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) =>
+                        {taskDatas.map((taskData: TaskData) =>
                             <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
                                 <Cell>
