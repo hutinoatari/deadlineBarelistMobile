@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Modal, Text, Button, View, Alert } from 'react-native';
 import { modalStyle } from "../styles/modalStyle";
+import { textStyle } from "../styles/textStyle";
 
 interface Props {
     visible: boolean;
@@ -21,7 +22,7 @@ const SettingModal: FC<Props> = ({
         >
             <View style={modalStyle.background}>
                 <View style={{flex: 1}}>
-                    <Text style={{fontWeight: "bold"}}>設定</Text>
+                    <Text style={textStyle.heading2}>設定</Text>
 
                     <Button title="キャッシュを含めて全削除" onPress={() => {
                         Alert.alert(

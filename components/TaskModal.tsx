@@ -5,6 +5,7 @@ import { generateRandomString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
 import { modalStyle } from "../styles/modalStyle";
+import { textStyle } from "../styles/textStyle";
 
 interface Props {
     visible: boolean;
@@ -40,7 +41,7 @@ const TaskModal: FC<Props> = ({
         >
             <View style={modalStyle.background}>
                 <View style={{flex: 1}}>
-                    <Text style={{fontWeight: "bold"}}>課題追加</Text>
+                    <Text style={textStyle.heading2}>課題追加</Text>
 
                     <View style={{
                         flexDirection: "row",

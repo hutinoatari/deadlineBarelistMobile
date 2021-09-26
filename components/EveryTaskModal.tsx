@@ -6,6 +6,7 @@ import { generateRandomString, dayString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
 import { modalStyle } from "../styles/modalStyle";
+import { textStyle } from "../styles/textStyle";
 
 interface Props {
     visible: boolean;
@@ -42,7 +43,7 @@ const EveryTaskModal: FC<Props> = ({
             animationType="slide"
         >
             <View style={modalStyle.background}>
-                <Text style={{fontWeight: "bold"}}>定期課題リスト</Text>
+                <Text style={textStyle.heading2}>定期課題リスト</Text>
 
                 <View style={{
                     flexDirection: "row",

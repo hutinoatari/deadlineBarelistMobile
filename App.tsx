@@ -11,6 +11,7 @@ import EveryTaskModal from "./components/EveryTaskModal";
 import SettingModal from "./components/SettingModal";
 import { TaskData, EveryTaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
+import { textStyle } from "./styles/textStyle";
 
 const storage: Storage = new Storage({
     size: 1024,
@@ -96,7 +97,7 @@ const App: FC<{}> = () => {
             </View>
 
             <View style={{flex: 1}}>
-                <Text style={{fontWeight: "bold"}}>課題リスト</Text>
+                <Text style={textStyle.heading2}>課題リスト</Text>
                 <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
                 <Button title="終了済の課題を全削除" onPress={() => {
                     Alert.alert(
