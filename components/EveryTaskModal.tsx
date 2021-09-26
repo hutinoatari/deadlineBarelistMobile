@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { StyleSheet, Modal,ScrollView, Text, Button, View, TextInput, Alert } from 'react-native';
 import { Table, Row, Cell } from "./Table";
 import { EveryTaskData } from "../types/data";
-import { dayString } from "../utils/util";
+import { generateRandomString, dayString } from "../utils/util";
+import { Picker } from "@react-native-picker/picker";
 
 interface Props {
     visible: boolean;
@@ -19,6 +20,10 @@ const EveryTaskModal: FC<Props> = ({
     addEveryTask,
     deleteEveryTask,
 }) => {
+    const [everyTaskName, setEveryTaskName] = useState<string>("");
+    const [selectedAddDay, setSelectedAddDay] = useState<number>(0);
+    const [grace, setGrace] = useState<string>("7");
+
     return (
         <Modal
             visible={visible}
@@ -39,6 +44,8 @@ const EveryTaskModal: FC<Props> = ({
                 }}>
                     <Text>名前　　: </Text>
                     <TextInput
+                        value={everyTaskName}
+                        onChangeText={setEveryTaskName}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
@@ -51,20 +58,28 @@ const EveryTaskModal: FC<Props> = ({
                     flexDirection: "row",
                 }}>
                     <Text>追加曜日: </Text>
-                    <TextInput
+                    <Picker
+                        selectedValue={selectedAddDay}
+                        onValueChange={(value) => {
+                            setSelectedAddDay(value);
+                        }}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
                             padding: 0,
                             flex: 1,
                         }}
-                    />
+                    >
+                        {dayString.map((day: string, i: number) => <Picker.Item key={i} label={day} value={i} />)}
+                    </Picker>
                 </View>
                 <View style={{
                     flexDirection: "row",
                 }}>
                     <Text>期限日数: </Text>
                     <TextInput
+                        value={grace}
+                        onChangeText={setGrace}
                         keyboardType="numeric"
                         style={{
                             backgroundColor: "white",
@@ -73,8 +88,20 @@ const EveryTaskModal: FC<Props> = ({
                             flex: 1,
                         }}
                     />
+                    <Text>日</Text>
                 </View>
-                <Button title="追加する" onPress={() => {}} />
+                <Button title="追加する" onPress={() => {
+                    const graceNumber = +grace;
+                    const addDay = selectedAddDay;
+                    if(everyTaskName.trim()!=="" && !isNaN(addDay) && !isNaN(graceNumber)){
+                        addEveryTask({
+                            id: generateRandomString(),
+                            name: everyTaskName,
+                            addDay: addDay,
+                            grace: graceNumber,
+                        });
+                    }
+                }} />
             </View>
 
             <View style={{
@@ -97,7 +124,16 @@ const EveryTaskModal: FC<Props> = ({
                                 <Cell><Text>{everyTaskData.name}</Text></Cell>
                                 <Cell><Text>{dayString[everyTaskData.addDay]}</Text></Cell>
                                 <Cell><Text>{`${everyTaskData.grace}日`}</Text></Cell>
-                                <Cell><Button title="削除" onPress={() => {}} color="red" /></Cell>
+                                <Cell><Button title="削除" onPress={() => {
+                                    Alert.alert(
+                                        "注意！",
+                                        `${everyTaskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
+                                        [
+                                            {text: "削除する", onPress: () => {deleteEveryTask(everyTaskData.id)}},
+                                            {text: "やめる", style: "cancel"}
+                                        ]
+                                    );
+                                }} color="red" /></Cell>
                             </Row>
                         )}
                     </Table>
