@@ -58,13 +58,14 @@ const EveryTaskModal: FC<Props> = ({
                     flexDirection: "row",
                 }}>
                     <Text>追加曜日: </Text>
-                    <Picker
-                        selectedValue={selectedAddDay}
-                        onValueChange={(value) => setSelectedAddDay(value)}
-                        style={formStyle.fillInput}
-                    >
-                        {dayString.map((day: string, i: number) => <Picker.Item key={i} label={day} value={i} />)}
-                    </Picker>
+                    <View style={formStyle.fillInput}>
+                        <Picker
+                            selectedValue={selectedAddDay}
+                            onValueChange={(value) => setSelectedAddDay(value)}
+                        >
+                            {dayString.map((day: string, i: number) => <Picker.Item key={i} label={day} value={i} />)}
+                        </Picker>
+                    </View>
                 </View>
                 <View style={{
                     flexDirection: "row",

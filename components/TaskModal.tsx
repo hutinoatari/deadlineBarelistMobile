@@ -56,29 +56,32 @@ const TaskModal: FC<Props> = ({
                         flexDirection: "row",
                     }}>
                         <Text>期限: </Text>
-                        <Picker
-                            selectedValue={selectedYear}
-                            onValueChange={(value) => setSelectedYear(value)}
-                            style={formStyle.fillInput}
-                        >
-                            {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
-                        </Picker>
+                        <View style={formStyle.fillInput}>
+                            <Picker
+                                selectedValue={selectedYear}
+                                onValueChange={(value) => setSelectedYear(value)}
+                            >
+                                {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
+                            </Picker>
+                        </View>
                         <Text>/</Text>
-                        <Picker
-                            selectedValue={selectedMonth}
-                            onValueChange={(value) => setSelectedMonth(value)}
-                            style={formStyle.fillInput}
-                        >
-                            {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
-                        </Picker>
+                        <View style={formStyle.fillInput}>
+                            <Picker
+                                selectedValue={selectedMonth}
+                                onValueChange={(value) => setSelectedMonth(value)}
+                            >
+                                {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
+                            </Picker>
+                        </View>
                         <Text>/</Text>
-                        <Picker
-                            selectedValue={selectedDate}
-                            onValueChange={(value) => setSelectedDate(value)}
-                            style={formStyle.fillInput}
-                        >
-                            {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
-                        </Picker>
+                        <View style={formStyle.fillInput}>
+                            <Picker
+                                selectedValue={selectedDate}
+                                onValueChange={(value) => setSelectedDate(value)}
+                            >
+                                {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
+                            </Picker>
+                        </View>
                     </View>
                     <Button title="追加する" onPress={() => {
                         if(taskName.trim() !== ""){
