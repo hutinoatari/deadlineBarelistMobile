@@ -1,6 +1,7 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC, useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
+import Storage from "react-native-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell } from "./components/Table";
 import Header from "./components/Header";
@@ -10,6 +11,13 @@ import EveryTaskModal from "./components/EveryTaskModal";
 import SettingModal from "./components/SettingModal";
 import { TaskData, EveryTaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
+
+const storage: Storage = new Storage({
+    size: 1028,
+    storageBackend: AsyncStorage,
+    defaultExpires: null,
+    enableCache: true,
+});
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
@@ -39,7 +47,8 @@ const App: FC<{}> = () => {
     const dataClear = () => {
         setTaskDatas([]);
         setEveryTaskDatas([]);
-        AsyncStorage.clear();
+        storage.remove({key: "task"});
+        storage.remove({key: "everyTask"});
     };
 
     const [nowUNIXTime, setNowUNIXTime] = useState<number>(new Date().getTime());
@@ -48,19 +57,21 @@ const App: FC<{}> = () => {
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
-        AsyncStorage.getItem("task").then((json) => {
-            if(json) setTaskDatas(JSON.parse(json));
-        });
-        AsyncStorage.getItem("everyTask").then((json) => {
-            if(json) setEveryTaskDatas(JSON.parse(json));
-        });
-    },[])
+        storage.load({key: "task"}).then((data: TaskData[]) => setTaskDatas(data));
+        storage.load({key: "everyTask"}).then((data: EveryTaskData[]) => setEveryTaskDatas(data));
+    },[]);
     useEffect(() => {
-        AsyncStorage.setItem("task", JSON.stringify(taskDatas));
-    }, [taskDatas])
+        storage.save({
+            key: "task",
+            data: taskDatas
+        });
+    }, [taskDatas]);
     useEffect(() => {
-        AsyncStorage.setItem("everyTask", JSON.stringify(everyTaskDatas));
-    }, [everyTaskDatas])
+        storage.save({
+            key: "everyTask",
+            data: everyTaskDatas
+        });
+    }, [everyTaskDatas]);
 
     return (
         <SafeAreaView style={{
