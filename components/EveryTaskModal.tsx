@@ -8,6 +8,7 @@ import { Picker } from "@react-native-picker/picker";
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
+    nowUNIXTime: number;
     everyTaskDatas: EveryTaskData[];
     addEveryTask: (newEveryTaskData: EveryTaskData) => void;
     deleteEveryTask: (id: string) => void;
@@ -16,13 +17,15 @@ interface Props {
 const EveryTaskModal: FC<Props> = ({
     visible,
     onRequestClose,
+    nowUNIXTime,
     everyTaskDatas,
     addEveryTask,
     deleteEveryTask,
 }) => {
+    const nowDate = new Date(nowUNIXTime);
     const [everyTaskName, setEveryTaskName] = useState<string>("");
-    const [selectedAddDay, setSelectedAddDay] = useState<number>(0);
-    const [grace, setGrace] = useState<string>("7");
+    const [selectedAddDay, setSelectedAddDay] = useState<number>(nowDate.getDay());
+    const [grace, setGrace] = useState<string>(""+7);
 
     return (
         <Modal
@@ -60,9 +63,7 @@ const EveryTaskModal: FC<Props> = ({
                     <Text>追加曜日: </Text>
                     <Picker
                         selectedValue={selectedAddDay}
-                        onValueChange={(value) => {
-                            setSelectedAddDay(value);
-                        }}
+                        onValueChange={(value) => setSelectedAddDay(value)}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
@@ -128,7 +129,7 @@ const EveryTaskModal: FC<Props> = ({
                                         "注意！",
                                         `${everyTaskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
                                         [
-                                            {text: "削除する", onPress: () => {deleteEveryTask(everyTaskData.id)}},
+                                            {text: "削除する", onPress: () => deleteEveryTask(everyTaskData.id)},
                                             {text: "やめる", style: "cancel"}
                                         ]
                                     );

@@ -42,7 +42,7 @@ const App: FC<{}> = () => {
         AsyncStorage.clear();
     };
 
-    const [todayUNIXTime, setTodayUNIXTime] = useState<number>(new Date().getTime());
+    const [nowUNIXTime, setNowUNIXTime] = useState<number>(new Date().getTime());
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
     const [everyTaskModalVisible, setEveryTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
@@ -95,14 +95,14 @@ const App: FC<{}> = () => {
                 backgroundColor: "#ffffaa",
             }}>
                 <Text style={{fontWeight: "bold"}}>課題リスト</Text>
-                <Button title="更新する" onPress={() => setTodayUNIXTime(new Date().getTime())} />
+                <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
                 <Button title="終了済の課題を全削除" onPress={() => {
                     Alert.alert(
                         "注意！",
                         "本当に削除しますか？(1度削除したデータは戻せません)",
                         [
                             {text: "削除する", onPress: () => {
-                                const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < todayUNIXTime) && taskData.isDone));
+                                const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXTime) && taskData.isDone));
                                 setTaskDatas(newData);
                             }},
                             {text: "やめる", style: "cancel"}
@@ -124,7 +124,7 @@ const App: FC<{}> = () => {
                             <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
                                 <Cell>
-                                    <Text style={{color: ((taskData.deadline < todayUNIXTime) && !taskData.isDone) ? "red" : "black"}}>
+                                    <Text style={{color: ((taskData.deadline < nowUNIXTime) && !taskData.isDone) ? "red" : "black"}}>
                                         {UNIXTimeToYYYYMMDD(taskData.deadline)}
                                     </Text>
                                 </Cell>
@@ -159,6 +159,7 @@ const App: FC<{}> = () => {
                 onRequestClose={() => {
                     setTaskModalVisible(false);
                 }}
+                nowUNIXTime={nowUNIXTime}
                 addTask={addTask}
             />
 
@@ -167,6 +168,7 @@ const App: FC<{}> = () => {
                 onRequestClose={() => {
                     setEveryTaskModalVisible(false);
                 }}
+                nowUNIXTime={nowUNIXTime}
                 everyTaskDatas={everyTaskDatas}
                 addEveryTask={addEveryTask}
                 deleteEveryTask={deleteEveryTask}
