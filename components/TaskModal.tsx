@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { StyleSheet, Modal, Text, TextInput, Button, View, Alert } from 'react-native';
 import { TaskData } from "../types/data";
 import { generateRandomString } from "../utils/util";
+import { Picker } from "@react-native-picker/picker";
 
 interface Props {
     visible: boolean;
@@ -15,9 +16,9 @@ const TaskModal: FC<Props> = ({
     addTask,
 }) => {
     const [taskName, setTaskName] = useState<string>("");
-    const [year, setYear] = useState<string>("" + new Date().getFullYear());
-    const [month, setMonth] = useState<string>("" + (new Date().getMonth() + 1));
-    const [date, setDate] = useState<string>("" + new Date().getDate());
+    const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+    const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
+    const [selectedDate, setSelectedDate] = useState<number>(new Date().getDate());
 
     return (
         <Modal
@@ -49,50 +50,55 @@ const TaskModal: FC<Props> = ({
                     flexDirection: "row",
                 }}>
                     <Text>期限: </Text>
-                    <TextInput
-                        value={year}
-                        onChangeText={setYear}
-                        keyboardType="numeric"
+                    <Picker
+                        selectedValue={selectedYear}
+                        onValueChange={(value) => {
+                            setSelectedYear(value);
+                        }}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
                             padding: 0,
                             flex: 1,
                         }}
-                    />
-                    <Text>年</Text>
-                    <TextInput
-                        value={month}
-                        onChangeText={setMonth}
-                        keyboardType="numeric"
+                    >
+                        {[...Array(2)].map((_, i) => i + new Date().getFullYear()).map((year, j) => <Picker.Item key={j} label={""+year} value={year} />)}
+                    </Picker>
+                    <Text>/</Text>
+                    <Picker
+                        selectedValue={selectedMonth}
+                        onValueChange={(value) => {
+                            setSelectedMonth(value);
+                        }}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
                             padding: 0,
                             flex: 1,
                         }}
-                    />
-                    <Text>月</Text>
-                    <TextInput
-                        value={date}
-                        onChangeText={setDate}
-                        keyboardType="numeric"
+                    >
+                        {[...Array(12)].map((_, i) => i).map((month, j) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
+                    </Picker>
+                    <Text>/</Text>
+                    <Picker
+                        selectedValue={selectedDate}
+                        onValueChange={(value) => {
+                            setSelectedDate(value);
+                        }}
                         style={{
                             backgroundColor: "white",
                             borderWidth: 1,
                             padding: 0,
                             flex: 1,
                         }}
-                    />
-                    <Text>日</Text>
+                    >
+                        {[...Array(31)].map((_, i) => i + 1).map((date, j) => <Picker.Item key={j} label={""+date} value={date} />)}
+                    </Picker>
                 </View>
                 <Button title="追加する" onPress={() => {
                     const taskNamestring = taskName;
-                    const yearNumber = +year;
-                    const monthNumber = +month - 1;
-                    const dateNumber = +date;
-                    if(taskNamestring.trim()!=="" && !isNaN(yearNumber) && !isNaN(monthNumber) && !isNaN(dateNumber)){
-                        const UNIXTime = new Date(yearNumber, monthNumber, dateNumber).getTime();
+                    if(taskNamestring.trim()!==""){
+                        const UNIXTime = new Date(selectedYear, selectedMonth, selectedDate).getTime();
                         addTask({
                             id: generateRandomString(),
                             name: taskNamestring,

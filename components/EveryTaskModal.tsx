@@ -92,12 +92,11 @@ const EveryTaskModal: FC<Props> = ({
                 </View>
                 <Button title="追加する" onPress={() => {
                     const graceNumber = +grace;
-                    const addDay = selectedAddDay;
-                    if(everyTaskName.trim()!=="" && !isNaN(addDay) && !isNaN(graceNumber)){
+                    if(everyTaskName.trim()!=="" && !isNaN(graceNumber)){
                         addEveryTask({
                             id: generateRandomString(),
                             name: everyTaskName,
-                            addDay: addDay,
+                            addDay: selectedAddDay,
                             grace: graceNumber,
                         });
                     }

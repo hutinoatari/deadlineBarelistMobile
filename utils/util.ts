@@ -12,7 +12,7 @@ const UNIXTimeToYYYYMMDD = (UNIXTime: number): string => {
 
 const charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const generateRandomString = (): string => {
-    const randomString = new Array(32).fill(undefined).map(() => chooseOne(charList)).join("");
+    const randomString = [...Array(32)].map(() => chooseOne(charList)).join("");
     return randomString;
 }
 
