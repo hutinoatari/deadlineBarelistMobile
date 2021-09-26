@@ -2,6 +2,7 @@
   "expo": {
     "name": "deadlineBarelistMobile",
     "slug": "deadlineBarelistMobile",
+    "sdkVersion": "42.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,10 +21,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "dev.hutinoatari.deadlineBarelistMobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
