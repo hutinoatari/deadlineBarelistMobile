@@ -102,7 +102,7 @@ const App: FC<{}> = () => {
                         <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
                     </View>
                     <View style={viewStyle.fat}>
-                        <Button title="終了済の課題を全削除" onPress={() => {
+                        <Button title="完了課題を削除" onPress={() => {
                             Alert.alert(
                                 "注意！",
                                 "本当に削除しますか？\n(1度削除したデータは戻せません)",
@@ -138,7 +138,7 @@ const App: FC<{}> = () => {
                                 </Cell>
                                 <Cell>
                                     <View style={viewStyle.row}>
-                                        <Text>{taskData.isDone ? "完" : "未"}</Text>
+                                        <Text style={{color: taskData.isDone ? "green" : "black"}}>{taskData.isDone ? "完" : "未"}</Text>
                                         <View style={viewStyle.fat}>
                                             <Button title="変更" onPress={() => changeDone(taskData.id)} />
                                         </View>
