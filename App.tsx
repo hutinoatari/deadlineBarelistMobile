@@ -105,7 +105,7 @@ const App: FC<{}> = () => {
                         <Button title="終了済の課題を全削除" onPress={() => {
                             Alert.alert(
                                 "注意！",
-                                "本当に削除しますか？(1度削除したデータは戻せません)",
+                                "本当に削除しますか？\n(1度削除したデータは戻せません)",
                                 [
                                     {text: "削除する", onPress: () => {
                                         const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXTime) && taskData.isDone));
@@ -147,7 +147,7 @@ const App: FC<{}> = () => {
                                 <Cell><Button title="削除" onPress={() => {
                                     Alert.alert(
                                         "注意！",
-                                        `${taskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
+                                        `「${taskData.name}」を本当に削除しますか？\n(1度削除したデータは戻せません)`,
                                         [
                                             {text: "削除する", onPress: () => deleteTask(taskData.id)},
                                             {text: "やめる", style: "cancel"}

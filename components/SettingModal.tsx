@@ -28,7 +28,7 @@ const SettingModal: FC<Props> = ({
                     <Button title="キャッシュを含めて全削除" onPress={() => {
                         Alert.alert(
                             "注意！",
-                            "本当に削除しますか？(1度削除したデータは戻せません)",
+                            "本当に削除しますか？\n(1度削除したデータは戻せません)",
                             [
                                 {text: "削除する", onPress: dataAllClear},
                                 {text: "やめる", style: "cancel"}

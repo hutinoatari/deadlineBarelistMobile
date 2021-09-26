@@ -85,6 +85,8 @@ const EveryTaskModal: FC<Props> = ({
                             grace: graceNumber,
                         });
                         formInit();
+                    }else{
+                        Alert.alert("注意！", "入力に不備があります。");
                     }
                 }} />
 
@@ -107,7 +109,7 @@ const EveryTaskModal: FC<Props> = ({
                                     <Cell><Button title="削除" onPress={() => {
                                         Alert.alert(
                                             "注意！",
-                                            `${everyTaskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
+                                            `「${everyTaskData.name}」を本当に削除しますか？\n(1度削除したデータは戻せません)`,
                                             [
                                                 {text: "削除する", onPress: () => deleteEveryTask(everyTaskData.id)},
                                                 {text: "やめる", style: "cancel"}

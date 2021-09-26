@@ -92,6 +92,8 @@ const TaskModal: FC<Props> = ({
                             });
                             formInit();
                             onRequestClose();
+                        }else{
+                            Alert.alert("注意！", "入力に不備があります。");
                         }
                     }} />
                 </View>
