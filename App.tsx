@@ -8,12 +8,13 @@ import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
 import EveryTaskModal from "./components/EveryTaskModal";
 import SettingModal from "./components/SettingModal";
-import { TaskData } from "./types/data";
+import { TaskData, EveryTaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
-    const [everyTaskDatas, setEveryTaskDatas] = useState<TaskData[]>([]);
+    //const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
+    const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([{id:"aaaa", name:"定期課題A",addDay:1,grace:7}]);
     const addTask = (newTaskData: TaskData): void => {
         setTaskDatas([...taskDatas, newTaskData]);
     }
@@ -25,8 +26,16 @@ const App: FC<{}> = () => {
         const newData = taskDatas.filter((e) => e.id !== id);
         setTaskDatas(newData);
     }
+    const addEveryTask = (newEveryTaskData: EveryTaskData): void => {
+        setEveryTaskDatas([...everyTaskDatas, newEveryTaskData]);
+    }
+    const deleteEveryTask = (id: string) => {
+        const newData = everyTaskDatas.filter((e) => e.id !== id);
+        setEveryTaskDatas(newData);
+    }
     const dataClear = () => {
         setTaskDatas([]);
+        setEveryTaskDatas([]);
         AsyncStorage.clear();
     };
 
@@ -38,11 +47,17 @@ const App: FC<{}> = () => {
     useEffect(() => {
         AsyncStorage.getItem("task").then((json) => {
             if(json) setTaskDatas(JSON.parse(json));
-        })
+        });
+        /*AsyncStorage.getItem("everyTask").then((json) => {
+            if(json) setEveryTaskDatas(JSON.parse(json));
+        });*/
     },[])
     useEffect(() => {
         AsyncStorage.setItem("task", JSON.stringify(taskDatas));
     }, [taskDatas])
+    useEffect(() => {
+        AsyncStorage.setItem("everyTask", JSON.stringify(everyTaskDatas));
+    }, [everyTaskDatas])
 
     return (
         <SafeAreaView style={{
@@ -101,7 +116,7 @@ const App: FC<{}> = () => {
                         </Row>
                     </Table>
                     <Table>
-                        {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) => 
+                        {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) =>
                             <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
                                 <Cell>
@@ -148,6 +163,9 @@ const App: FC<{}> = () => {
                 onRequestClose={() => {
                     setEveryTaskModalVisible(false);
                 }}
+                everyTaskDatas={everyTaskDatas}
+                addEveryTask={addEveryTask}
+                deleteEveryTask={deleteEveryTask}
             />
 
             <SettingModal

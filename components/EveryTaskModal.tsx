@@ -1,15 +1,23 @@
 import React, { FC } from 'react';
 import { StyleSheet, Modal,ScrollView, Text, Button, View, TextInput, Alert } from 'react-native';
 import { Table, Row, Cell } from "./Table";
+import { EveryTaskData } from "../types/data";
+import { dayString } from "../utils/util";
 
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
+    everyTaskDatas: EveryTaskData[];
+    addEveryTask: (newEveryTaskData: EveryTaskData) => void;
+    deleteEveryTask: (id: string) => void;
 }
 
 const EveryTaskModal: FC<Props> = ({
     visible,
     onRequestClose,
+    everyTaskDatas,
+    addEveryTask,
+    deleteEveryTask,
 }) => {
     return (
         <Modal
@@ -83,12 +91,14 @@ const EveryTaskModal: FC<Props> = ({
                         </Row>
                     </Table>
                     <Table>
-                        <Row>
-                            <Cell><Text>課題A</Text></Cell>
-                            <Cell><Text>月曜日</Text></Cell>
-                            <Cell><Text>7日</Text></Cell>
-                            <Cell><Button title="削除" onPress={() => {}} color="red" /></Cell>
-                        </Row>
+                        {everyTaskDatas.sort((a: EveryTaskData, b: EveryTaskData) => a.addDay - b.addDay).map((everyTaskData: EveryTaskData) =>
+                            <Row key={everyTaskData.id}>
+                                <Cell><Text>{everyTaskData.name}</Text></Cell>
+                                <Cell><Text>{dayString[everyTaskData.addDay]}</Text></Cell>
+                                <Cell><Text>{`${everyTaskData.grace}日`}</Text></Cell>
+                                <Cell><Button title="削除" onPress={() => {}} color="red" /></Cell>
+                            </Row>
+                        )}
                     </Table>
                 </ScrollView>
             </View>
