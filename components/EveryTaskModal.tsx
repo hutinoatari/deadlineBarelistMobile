@@ -17,7 +17,6 @@ const EveryTaskModal: FC<Props> = ({
             onRequestClose={onRequestClose}
             animationType="slide"
         >
-            <Button title="閉じる" onPress={onRequestClose} />
             <View style={{
                 backgroundColor: "#aaaaff",
             }}>
@@ -93,6 +92,7 @@ const EveryTaskModal: FC<Props> = ({
                     </Table>
                 </ScrollView>
             </View>
+            <Button title="閉じる" onPress={onRequestClose} />
         </Modal>
     );
 }

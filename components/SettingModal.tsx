@@ -18,9 +18,9 @@ const SettingModal: FC<Props> = ({
             onRequestClose={onRequestClose}
             animationType="slide"
         >
-            <Button title="閉じる" onPress={onRequestClose} />
             <View style={{
                 backgroundColor: "#aaaaff",
+                flex: 1,
             }}>
                 <Text style={{fontWeight: "bold"}}>設定</Text>
                 <Button title="キャッシュを含めて全削除" onPress={() => {
@@ -34,6 +34,7 @@ const SettingModal: FC<Props> = ({
                     );
                 }} color="red" />
             </View>
+            <Button title="閉じる" onPress={onRequestClose} />
         </Modal>
     );
 }

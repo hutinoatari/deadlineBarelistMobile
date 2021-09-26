@@ -25,9 +25,9 @@ const TaskModal: FC<Props> = ({
             onRequestClose={onRequestClose}
             animationType="slide"
         >
-            <Button title="閉じる" onPress={onRequestClose} />
             <View style={{
                 backgroundColor: "#aaaaff",
+                flex: 1,
             }}>
                 <Text style={{fontWeight: "bold"}}>課題追加</Text>
                 <View style={{
@@ -103,6 +103,7 @@ const TaskModal: FC<Props> = ({
                     }
                 }} />
             </View>
+            <Button title="閉じる" onPress={onRequestClose} />
         </Modal>
     );
 }
