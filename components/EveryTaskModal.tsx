@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react';
 import { Modal,ScrollView, Text, Button, View, TextInput, Alert } from 'react-native';
-import { Table, Row, Cell } from "./Table";
+import { Table, Row, Cell, CellHead } from "./Table";
 import { EveryTaskData } from "../types/data";
 import { generateRandomString, dayString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
 import { modalStyle } from "../styles/modalStyle";
 import { textStyle } from "../styles/textStyle";
+import { viewStyle } from "../styles/viewStyle";
 
 interface Props {
     visible: boolean;
@@ -45,9 +46,7 @@ const EveryTaskModal: FC<Props> = ({
             <View style={modalStyle.background}>
                 <Text style={textStyle.heading2}>定期課題リスト</Text>
 
-                <View style={{
-                    flexDirection: "row",
-                }}>
+                <View style={viewStyle.row}>
                     <Text>名前　　: </Text>
                     <TextInput
                         value={everyTaskName}
@@ -55,9 +54,7 @@ const EveryTaskModal: FC<Props> = ({
                         style={formStyle.fillInput}
                     />
                 </View>
-                <View style={{
-                    flexDirection: "row",
-                }}>
+                <View style={viewStyle.row}>
                     <Text>追加曜日: </Text>
                     <View style={formStyle.fillInput}>
                         <Picker
@@ -68,9 +65,7 @@ const EveryTaskModal: FC<Props> = ({
                         </Picker>
                     </View>
                 </View>
-                <View style={{
-                    flexDirection: "row",
-                }}>
+                <View style={viewStyle.row}>
                     <Text>期限日数: </Text>
                     <TextInput
                         value={grace}
@@ -93,13 +88,13 @@ const EveryTaskModal: FC<Props> = ({
                     }
                 }} />
 
-                <View style={{flex: 1}}>
+                <View style={viewStyle.fat}>
                     <Table>
                         <Row>
-                            <Cell><Text>名前</Text></Cell>
-                            <Cell><Text>追加曜日</Text></Cell>
-                            <Cell><Text>期限日数</Text></Cell>
-                            <Cell><Text>削除</Text></Cell>
+                            <CellHead><Text>名前</Text></CellHead>
+                            <CellHead><Text>追加曜日</Text></CellHead>
+                            <CellHead><Text>期限日数</Text></CellHead>
+                            <CellHead><Text>削除</Text></CellHead>
                         </Row>
                     </Table>
                     <ScrollView>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import {tableStyle} from "../styles/tableStyle";
+import { tableStyle } from "../styles/tableStyle";
 
 const Table: FC<{}> = ({children}) => {
     return (
@@ -26,4 +26,12 @@ const Cell: FC<{}> = ({children}) => {
     );
 }
 
-export { Table, Row, Cell };
+const CellHead: FC<{}> = ({children}) => {
+    return (
+        <View style={tableStyle.cellHead}>
+            {children}
+        </View>
+    );
+}
+
+export { Table, Row, Cell, CellHead };

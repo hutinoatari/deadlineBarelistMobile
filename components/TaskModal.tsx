@@ -6,6 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
 import { modalStyle } from "../styles/modalStyle";
 import { textStyle } from "../styles/textStyle";
+import { viewStyle } from "../styles/viewStyle";
 
 interface Props {
     visible: boolean;
@@ -40,12 +41,10 @@ const TaskModal: FC<Props> = ({
             animationType="slide"
         >
             <View style={modalStyle.background}>
-                <View style={{flex: 1}}>
+                <View style={viewStyle.fat}>
                     <Text style={textStyle.heading2}>課題追加</Text>
 
-                    <View style={{
-                        flexDirection: "row",
-                    }}>
+                    <View style={viewStyle.row}>
                         <Text>名前: </Text>
                         <TextInput
                             value={taskName}
@@ -53,9 +52,7 @@ const TaskModal: FC<Props> = ({
                             style={formStyle.fillInput}
                         />
                     </View>
-                    <View style={{
-                        flexDirection: "row",
-                    }}>
+                    <View style={viewStyle.row}>
                         <Text>期限: </Text>
                         <View style={formStyle.fillInput}>
                             <Picker

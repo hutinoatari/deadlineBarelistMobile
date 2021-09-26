@@ -11,6 +11,11 @@ const tableStyle = StyleSheet.create({
         flex: 1,
         borderWidth: 1,
     },
+    cellHead: {
+        flex: 1,
+        borderWidth: 1,
+        alignItems: "center",
+    },
 });
 
 export { tableStyle };

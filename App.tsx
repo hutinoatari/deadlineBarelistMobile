@@ -3,7 +3,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
 import Storage from "react-native-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Table, Row, Cell } from "./components/Table";
+import { Table, Row, Cell, CellHead } from "./components/Table";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
@@ -12,6 +12,7 @@ import SettingModal from "./components/SettingModal";
 import { TaskData, EveryTaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
 import { textStyle } from "./styles/textStyle";
+import { viewStyle } from "./styles/viewStyle";
 
 const storage: Storage = new Storage({
     size: 1024,
@@ -75,20 +76,18 @@ const App: FC<{}> = () => {
     }, [everyTaskDatas]);
 
     return (
-        <SafeAreaView style={{
-            flex: 1,
+        <SafeAreaView style={[{
             paddingTop: StatusBar.currentHeight,
             backgroundColor: "oldlace",
-        }}>
+        }, viewStyle.fat]}>
             <ExpoStatusBar />
 
             <Header />
 
-            <View style={{
-                flexDirection: "row",
+            <View style={[{
                 alignItems: "center",
                 justifyContent: "center",
-            }}>
+            }, viewStyle.row]}>
                 <Button title="課題追加" onPress={() => setTaskModalVisible(true)} />
                 <Text>・</Text>
                 <Button title="定期課題リスト" onPress={() => setEveryTaskModalVisible(true)} />
@@ -96,29 +95,35 @@ const App: FC<{}> = () => {
                 <Button title="設定" onPress={() => setSettingModalVisible(true)} />
             </View>
 
-            <View style={{flex: 1}}>
+            <View style={viewStyle.fat}>
                 <Text style={textStyle.heading2}>課題リスト</Text>
-                <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
-                <Button title="終了済の課題を全削除" onPress={() => {
-                    Alert.alert(
-                        "注意！",
-                        "本当に削除しますか？(1度削除したデータは戻せません)",
-                        [
-                            {text: "削除する", onPress: () => {
-                                const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXTime) && taskData.isDone));
-                                setTaskDatas(newData);
-                            }},
-                            {text: "やめる", style: "cancel"}
-                        ]
-                    );
-                }} color="red" />
+                <View style={viewStyle.row}>
+                    <View style={viewStyle.fat}>
+                        <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
+                    </View>
+                    <View style={viewStyle.fat}>
+                        <Button title="終了済の課題を全削除" onPress={() => {
+                            Alert.alert(
+                                "注意！",
+                                "本当に削除しますか？(1度削除したデータは戻せません)",
+                                [
+                                    {text: "削除する", onPress: () => {
+                                        const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXTime) && taskData.isDone));
+                                        setTaskDatas(newData);
+                                    }},
+                                    {text: "やめる", style: "cancel"}
+                                ]
+                            );
+                        }} color="red" />
+                    </View>
+                </View>
                 
                 <Table>
                     <Row>
-                        <Cell><Text>名前</Text></Cell>
-                        <Cell><Text>期限</Text></Cell>
-                        <Cell><Text>状態</Text></Cell>
-                        <Cell><Text>削除</Text></Cell>
+                        <CellHead><Text>名前</Text></CellHead>
+                        <CellHead><Text>期限</Text></CellHead>
+                        <CellHead><Text>状態</Text></CellHead>
+                        <CellHead><Text>削除</Text></CellHead>
                     </Row>
                 </Table>
                 <ScrollView>
@@ -132,9 +137,9 @@ const App: FC<{}> = () => {
                                     </Text>
                                 </Cell>
                                 <Cell>
-                                    <View style={{flexDirection: "row"}}>
+                                    <View style={viewStyle.row}>
                                         <Text>{taskData.isDone ? "完" : "未"}</Text>
-                                        <View style={{flex: 1}}>
+                                        <View style={viewStyle.fat}>
                                             <Button title="変更" onPress={() => changeDone(taskData.id)} />
                                         </View>
                                     </View>

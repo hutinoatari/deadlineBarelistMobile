@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Modal, Text, Button, View, Alert } from 'react-native';
 import { modalStyle } from "../styles/modalStyle";
 import { textStyle } from "../styles/textStyle";
+import { viewStyle } from "../styles/viewStyle";
 
 interface Props {
     visible: boolean;
@@ -21,7 +22,7 @@ const SettingModal: FC<Props> = ({
             animationType="slide"
         >
             <View style={modalStyle.background}>
-                <View style={{flex: 1}}>
+                <View style={viewStyle.fat}>
                     <Text style={textStyle.heading2}>設定</Text>
 
                     <Button title="キャッシュを含めて全削除" onPress={() => {
