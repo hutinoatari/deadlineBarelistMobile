@@ -25,11 +25,19 @@ const TaskModal: FC<Props> = ({
     const [selectedMonth, setSelectedMonth] = useState<number>(nowDate.getMonth());
     const [selectedDate, setSelectedDate] = useState<number>(nowDate.getDate());
 
+    const formInit = () => {
+        setTaskName("");
+        setSelectedYear(nowDate.getFullYear());
+        setSelectedMonth(nowDate.getMonth());
+        setSelectedDate(nowDate.getDate());
+    }
+
     return (
         <Modal
             visible={visible}
             onRequestClose={onRequestClose}
             animationType="slide"
+            onDismiss={formInit}
         >
             <View style={modalStyle.background}>
                 <View style={{flex: 1}}>
@@ -82,12 +90,16 @@ const TaskModal: FC<Props> = ({
                                 deadline: UNIXTime,
                                 isDone: false,
                             });
+                            formInit();
                             onRequestClose();
                         }
                     }} />
                 </View>
 
-                <Button title="閉じる" onPress={onRequestClose} />
+                <Button title="閉じる" onPress={() => {
+                    formInit();
+                    onRequestClose();
+                }} />
             </View>
         </Modal>
     );

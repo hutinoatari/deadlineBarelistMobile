@@ -29,6 +29,12 @@ const EveryTaskModal: FC<Props> = ({
     const [selectedAddDay, setSelectedAddDay] = useState<number>(nowDate.getDay());
     const [grace, setGrace] = useState<string>(""+7);
 
+    const formInit = () => {
+        setEveryTaskName("");
+        setSelectedAddDay(nowDate.getDay());
+        setGrace(""+7);
+    }
+
     return (
         <Modal
             visible={visible}
@@ -81,6 +87,7 @@ const EveryTaskModal: FC<Props> = ({
                             addDay: selectedAddDay,
                             grace: graceNumber,
                         });
+                        formInit();
                     }
                 }} />
 
@@ -116,7 +123,10 @@ const EveryTaskModal: FC<Props> = ({
                     </ScrollView>
                 </View>
 
-                <Button title="閉じる" onPress={onRequestClose} />
+                <Button title="閉じる" onPress={() => {
+                    formInit();
+                    onRequestClose();
+                }} />
             </View>
         </Modal>
     );
