@@ -4,6 +4,7 @@ import { TaskData } from "../types/data";
 import { generateRandomString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
+import { modalStyle } from "../styles/modalStyle";
 
 interface Props {
     visible: boolean;
@@ -30,63 +31,64 @@ const TaskModal: FC<Props> = ({
             onRequestClose={onRequestClose}
             animationType="slide"
         >
-            <View style={{
-                backgroundColor: "#aaaaff",
-                flex: 1,
-            }}>
-                <Text style={{fontWeight: "bold"}}>課題追加</Text>
-                <View style={{
-                    flexDirection: "row",
-                }}>
-                    <Text>名前: </Text>
-                    <TextInput
-                        value={taskName}
-                        onChangeText={setTaskName}
-                        style={formStyle.fillInput}
-                    />
+            <View style={modalStyle.background}>
+                <View style={{flex: 1}}>
+                    <Text style={{fontWeight: "bold"}}>課題追加</Text>
+
+                    <View style={{
+                        flexDirection: "row",
+                    }}>
+                        <Text>名前: </Text>
+                        <TextInput
+                            value={taskName}
+                            onChangeText={setTaskName}
+                            style={formStyle.fillInput}
+                        />
+                    </View>
+                    <View style={{
+                        flexDirection: "row",
+                    }}>
+                        <Text>期限: </Text>
+                        <Picker
+                            selectedValue={selectedYear}
+                            onValueChange={(value) => setSelectedYear(value)}
+                            style={formStyle.fillInput}
+                        >
+                            {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
+                        </Picker>
+                        <Text>/</Text>
+                        <Picker
+                            selectedValue={selectedMonth}
+                            onValueChange={(value) => setSelectedMonth(value)}
+                            style={formStyle.fillInput}
+                        >
+                            {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
+                        </Picker>
+                        <Text>/</Text>
+                        <Picker
+                            selectedValue={selectedDate}
+                            onValueChange={(value) => setSelectedDate(value)}
+                            style={formStyle.fillInput}
+                        >
+                            {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
+                        </Picker>
+                    </View>
+                    <Button title="追加する" onPress={() => {
+                        if(taskName.trim() !== ""){
+                            const UNIXTime = new Date(selectedYear, selectedMonth, selectedDate).getTime();
+                            addTask({
+                                id: generateRandomString(),
+                                name: taskName,
+                                deadline: UNIXTime,
+                                isDone: false,
+                            });
+                            onRequestClose();
+                        }
+                    }} />
                 </View>
-                <View style={{
-                    flexDirection: "row",
-                }}>
-                    <Text>期限: </Text>
-                    <Picker
-                        selectedValue={selectedYear}
-                        onValueChange={(value) => setSelectedYear(value)}
-                        style={formStyle.fillInput}
-                    >
-                        {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
-                    </Picker>
-                    <Text>/</Text>
-                    <Picker
-                        selectedValue={selectedMonth}
-                        onValueChange={(value) => setSelectedMonth(value)}
-                        style={formStyle.fillInput}
-                    >
-                        {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
-                    </Picker>
-                    <Text>/</Text>
-                    <Picker
-                        selectedValue={selectedDate}
-                        onValueChange={(value) => setSelectedDate(value)}
-                        style={formStyle.fillInput}
-                    >
-                        {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
-                    </Picker>
-                </View>
-                <Button title="追加する" onPress={() => {
-                    if(taskName.trim() !== ""){
-                        const UNIXTime = new Date(selectedYear, selectedMonth, selectedDate).getTime();
-                        addTask({
-                            id: generateRandomString(),
-                            name: taskName,
-                            deadline: UNIXTime,
-                            isDone: false,
-                        });
-                        onRequestClose();
-                    }
-                }} />
+
+                <Button title="閉じる" onPress={onRequestClose} />
             </View>
-            <Button title="閉じる" onPress={onRequestClose} />
         </Modal>
     );
 }

@@ -5,6 +5,7 @@ import { EveryTaskData } from "../types/data";
 import { generateRandomString, dayString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
 import { formStyle } from "../styles/formStyle";
+import { modalStyle } from "../styles/modalStyle";
 
 interface Props {
     visible: boolean;
@@ -34,15 +35,9 @@ const EveryTaskModal: FC<Props> = ({
             onRequestClose={onRequestClose}
             animationType="slide"
         >
-            <View style={{
-                backgroundColor: "#aaaaff",
-            }}>
+            <View style={modalStyle.background}>
                 <Text style={{fontWeight: "bold"}}>定期課題リスト</Text>
-            </View>
 
-            <View style={{
-                backgroundColor: "#aaaaff",
-            }}>
                 <View style={{
                     flexDirection: "row",
                 }}>
@@ -88,44 +83,41 @@ const EveryTaskModal: FC<Props> = ({
                         });
                     }
                 }} />
-            </View>
 
-            <View style={{
-                flex: 1,
-                backgroundColor: "#ffffaa",
-            }}>
-                
-                <Table>
-                    <Row>
-                        <Cell><Text>名前</Text></Cell>
-                        <Cell><Text>追加曜日</Text></Cell>
-                        <Cell><Text>期限日数</Text></Cell>
-                        <Cell><Text>削除</Text></Cell>
-                    </Row>
-                </Table>
-                <ScrollView>
+                <View style={{flex: 1}}>
                     <Table>
-                        {everyTaskDatas.map((everyTaskData: EveryTaskData) =>
-                            <Row key={everyTaskData.id}>
-                                <Cell><Text>{everyTaskData.name}</Text></Cell>
-                                <Cell><Text>{dayString[everyTaskData.addDay]}</Text></Cell>
-                                <Cell><Text>{`${everyTaskData.grace}日`}</Text></Cell>
-                                <Cell><Button title="削除" onPress={() => {
-                                    Alert.alert(
-                                        "注意！",
-                                        `${everyTaskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
-                                        [
-                                            {text: "削除する", onPress: () => deleteEveryTask(everyTaskData.id)},
-                                            {text: "やめる", style: "cancel"}
-                                        ]
-                                    );
-                                }} color="red" /></Cell>
-                            </Row>
-                        )}
+                        <Row>
+                            <Cell><Text>名前</Text></Cell>
+                            <Cell><Text>追加曜日</Text></Cell>
+                            <Cell><Text>期限日数</Text></Cell>
+                            <Cell><Text>削除</Text></Cell>
+                        </Row>
                     </Table>
-                </ScrollView>
+                    <ScrollView>
+                        <Table>
+                            {everyTaskDatas.map((everyTaskData: EveryTaskData) =>
+                                <Row key={everyTaskData.id}>
+                                    <Cell><Text>{everyTaskData.name}</Text></Cell>
+                                    <Cell><Text>{dayString[everyTaskData.addDay]}</Text></Cell>
+                                    <Cell><Text>{`${everyTaskData.grace}日`}</Text></Cell>
+                                    <Cell><Button title="削除" onPress={() => {
+                                        Alert.alert(
+                                            "注意！",
+                                            `${everyTaskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
+                                            [
+                                                {text: "削除する", onPress: () => deleteEveryTask(everyTaskData.id)},
+                                                {text: "やめる", style: "cancel"}
+                                            ]
+                                        );
+                                    }} color="red" /></Cell>
+                                </Row>
+                            )}
+                        </Table>
+                    </ScrollView>
+                </View>
+
+                <Button title="閉じる" onPress={onRequestClose} />
             </View>
-            <Button title="閉じる" onPress={onRequestClose} />
         </Modal>
     );
 }
