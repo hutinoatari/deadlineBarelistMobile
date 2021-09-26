@@ -106,15 +106,16 @@ const App: FC<{}> = () => {
                         ]
                     );
                 }} color="red" />
+                
+                <Table>
+                    <Row>
+                        <Cell><Text>名前</Text></Cell>
+                        <Cell><Text>期限</Text></Cell>
+                        <Cell><Text>状態</Text></Cell>
+                        <Cell><Text>削除</Text></Cell>
+                    </Row>
+                </Table>
                 <ScrollView>
-                    <Table>
-                        <Row>
-                            <Cell><Text>名前</Text></Cell>
-                            <Cell><Text>期限</Text></Cell>
-                            <Cell><Text>状態</Text></Cell>
-                            <Cell><Text>削除</Text></Cell>
-                        </Row>
-                    </Table>
                     <Table>
                         {taskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline).map((taskData: TaskData) =>
                             <Row key={taskData.id}>

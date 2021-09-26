@@ -81,15 +81,16 @@ const EveryTaskModal: FC<Props> = ({
                 flex: 1,
                 backgroundColor: "#ffffaa",
             }}>
+                
+                <Table>
+                    <Row>
+                        <Cell><Text>名前</Text></Cell>
+                        <Cell><Text>追加曜日</Text></Cell>
+                        <Cell><Text>期限日数</Text></Cell>
+                        <Cell><Text>削除</Text></Cell>
+                    </Row>
+                </Table>
                 <ScrollView>
-                    <Table>
-                        <Row>
-                            <Cell><Text>名前</Text></Cell>
-                            <Cell><Text>追加曜日</Text></Cell>
-                            <Cell><Text>期限日数</Text></Cell>
-                            <Cell><Text>削除</Text></Cell>
-                        </Row>
-                    </Table>
                     <Table>
                         {everyTaskDatas.sort((a: EveryTaskData, b: EveryTaskData) => a.addDay - b.addDay).map((everyTaskData: EveryTaskData) =>
                             <Row key={everyTaskData.id}>
