@@ -77,17 +77,11 @@ const App: FC<{}> = () => {
                 alignItems: "center",
                 justifyContent: "center",
             }}>
-                <Button title="課題追加" onPress={() => {
-                    setTaskModalVisible(true);
-                }} />
+                <Button title="課題追加" onPress={() => setTaskModalVisible(true)} />
                 <Text>・</Text>
-                <Button title="定期課題リスト" onPress={() => {
-                    setEveryTaskModalVisible(true);
-                }} />
+                <Button title="定期課題リスト" onPress={() => setEveryTaskModalVisible(true)} />
                 <Text>・</Text>
-                <Button title="設定" onPress={() => {
-                    setSettingModalVisible(true);
-                }} />
+                <Button title="設定" onPress={() => setSettingModalVisible(true)} />
             </View>
 
             <View style={{
@@ -141,7 +135,7 @@ const App: FC<{}> = () => {
                                         "注意！",
                                         `${taskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
                                         [
-                                            {text: "削除する", onPress: () => {deleteTask(taskData.id)}},
+                                            {text: "削除する", onPress: () => deleteTask(taskData.id)},
                                             {text: "やめる", style: "cancel"}
                                         ]
                                     );
@@ -156,18 +150,14 @@ const App: FC<{}> = () => {
 
             <TaskModal
                 visible={taskModalVisible}
-                onRequestClose={() => {
-                    setTaskModalVisible(false);
-                }}
+                onRequestClose={() => setTaskModalVisible(false)}
                 nowUNIXTime={nowUNIXTime}
                 addTask={addTask}
             />
 
             <EveryTaskModal
                 visible={everyTaskModalVisible}
-                onRequestClose={() => {
-                    setEveryTaskModalVisible(false);
-                }}
+                onRequestClose={() => setEveryTaskModalVisible(false)}
                 nowUNIXTime={nowUNIXTime}
                 everyTaskDatas={everyTaskDatas}
                 addEveryTask={addEveryTask}
@@ -176,9 +166,7 @@ const App: FC<{}> = () => {
 
             <SettingModal
                 visible={settingModalVisible}
-                onRequestClose={() => {
-                    setSettingModalVisible(false);
-                }}
+                onRequestClose={() => setSettingModalVisible(false)}
                 dataClear={dataClear}
             />
         </SafeAreaView>
