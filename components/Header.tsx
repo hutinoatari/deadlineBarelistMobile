@@ -3,10 +3,7 @@ import { Text, View } from 'react-native';
 
 const Header: FC<{}> = () => {
     return (
-        <View style={{
-            backgroundColor: "#ffaaaa",
-            alignItems: "center",
-        }}>
+        <View style={{alignItems: "center"}}>
             <Text>期限ギリギリスト</Text>
         </View>
     );

@@ -13,7 +13,7 @@ import { TaskData, EveryTaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
 const storage: Storage = new Storage({
-    size: 1028,
+    size: 1024,
     storageBackend: AsyncStorage,
     defaultExpires: null,
     enableCache: true,
@@ -44,7 +44,7 @@ const App: FC<{}> = () => {
         const newData = everyTaskDatas.filter((everyTaskData: EveryTaskData) => everyTaskData.id !== id);
         setEveryTaskDatas(newData);
     }
-    const dataClear = () => {
+    const dataAllClear = () => {
         setTaskDatas([]);
         setEveryTaskDatas([]);
         storage.remove({key: "task"});
@@ -77,6 +77,7 @@ const App: FC<{}> = () => {
         <SafeAreaView style={{
             flex: 1,
             paddingTop: StatusBar.currentHeight,
+            backgroundColor: "lightgray",
         }}>
             <ExpoStatusBar />
 
@@ -84,7 +85,6 @@ const App: FC<{}> = () => {
 
             <View style={{
                 flexDirection: "row",
-                backgroundColor: "#aaffaa",
                 alignItems: "center",
                 justifyContent: "center",
             }}>
@@ -95,10 +95,7 @@ const App: FC<{}> = () => {
                 <Button title="設定" onPress={() => setSettingModalVisible(true)} />
             </View>
 
-            <View style={{
-                flex: 1,
-                backgroundColor: "#ffffaa",
-            }}>
+            <View style={{flex: 1}}>
                 <Text style={{fontWeight: "bold"}}>課題リスト</Text>
                 <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
                 <Button title="終了済の課題を全削除" onPress={() => {
@@ -178,7 +175,7 @@ const App: FC<{}> = () => {
             <SettingModal
                 visible={settingModalVisible}
                 onRequestClose={() => setSettingModalVisible(false)}
-                dataClear={dataClear}
+                dataAllClear={dataAllClear}
             />
         </SafeAreaView>
     );

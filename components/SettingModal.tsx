@@ -5,13 +5,13 @@ import { modalStyle } from "../styles/modalStyle";
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
-    dataClear: () => void;
+    dataAllClear: () => void;
 }
 
 const SettingModal: FC<Props> = ({
     visible,
     onRequestClose,
-    dataClear,
+    dataAllClear,
 }) => {
     return (
         <Modal
@@ -28,7 +28,7 @@ const SettingModal: FC<Props> = ({
                             "注意！",
                             "本当に削除しますか？(1度削除したデータは戻せません)",
                             [
-                                {text: "削除する", onPress: () => {dataClear()}},
+                                {text: "削除する", onPress: dataAllClear},
                                 {text: "やめる", style: "cancel"}
                             ]
                         );
