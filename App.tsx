@@ -6,12 +6,14 @@ import { Table, Row, Cell } from "./components/Table";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TaskModal from "./components/TaskModal";
+import EveryTaskModal from "./components/EveryTaskModal";
 import SettingModal from "./components/SettingModal";
 import { TaskData } from "./types/data";
 import { UNIXTimeToYYYYMMDD } from "./utils/util";
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
+    const [everyTaskDatas, setEveryTaskDatas] = useState<TaskData[]>([]);
     const addTask = (newTaskData: TaskData): void => {
         setTaskDatas([...taskDatas, newTaskData]);
     }
@@ -30,6 +32,7 @@ const App: FC<{}> = () => {
 
     const [todayUNIXTime, setTodayUNIXTime] = useState<number>(new Date().getTime());
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
+    const [everyTaskModalVisible, setEveryTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
@@ -60,7 +63,9 @@ const App: FC<{}> = () => {
                     setTaskModalVisible(true);
                 }} />
                 <Text>・</Text>
-                <Button title="定期課題リスト" onPress={() => {}} disabled />
+                <Button title="定期課題リスト" onPress={() => {
+                    setEveryTaskModalVisible(true);
+                }} />
                 <Text>・</Text>
                 <Button title="設定" onPress={() => {
                     setSettingModalVisible(true);
@@ -118,6 +123,13 @@ const App: FC<{}> = () => {
                     setTaskModalVisible(false);
                 }}
                 addTask={addTask}
+            />
+
+            <EveryTaskModal
+                visible={everyTaskModalVisible}
+                onRequestClose={() => {
+                    setEveryTaskModalVisible(false);
+                }}
             />
 
             <SettingModal
