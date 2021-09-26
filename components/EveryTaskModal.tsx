@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, Modal,ScrollView, Text, Button, View, TextInput, Alert } from 'react-native';
+import { Modal,ScrollView, Text, Button, View, TextInput, Alert } from 'react-native';
 import { Table, Row, Cell } from "./Table";
 import { EveryTaskData } from "../types/data";
 import { generateRandomString, dayString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
+import { formStyle } from "../styles/formStyle";
 
 interface Props {
     visible: boolean;
@@ -49,12 +50,7 @@ const EveryTaskModal: FC<Props> = ({
                     <TextInput
                         value={everyTaskName}
                         onChangeText={setEveryTaskName}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     />
                 </View>
                 <View style={{
@@ -64,12 +60,7 @@ const EveryTaskModal: FC<Props> = ({
                     <Picker
                         selectedValue={selectedAddDay}
                         onValueChange={(value) => setSelectedAddDay(value)}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     >
                         {dayString.map((day: string, i: number) => <Picker.Item key={i} label={day} value={i} />)}
                     </Picker>
@@ -82,12 +73,7 @@ const EveryTaskModal: FC<Props> = ({
                         value={grace}
                         onChangeText={setGrace}
                         keyboardType="numeric"
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     />
                     <Text>日</Text>
                 </View>

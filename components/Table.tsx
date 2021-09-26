@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+import {tableStyle} from "../styles/tableStyle";
 
 const Table: FC<{}> = ({children}) => {
     return (
-        <View style={{
-            borderWidth: 1,
-        }}>
+        <View style={tableStyle.table}>
             {children}
         </View>
     );
@@ -13,9 +12,7 @@ const Table: FC<{}> = ({children}) => {
 
 const Row: FC<{}> = ({children}) => {
     return (
-        <View style={{
-            flexDirection: "row",
-        }}>
+        <View style={tableStyle.row}>
             {children}
         </View>
     );
@@ -23,10 +20,7 @@ const Row: FC<{}> = ({children}) => {
 
 const Cell: FC<{}> = ({children}) => {
     return (
-        <View style={{
-            flex: 1,
-            borderWidth: 1,
-        }}>
+        <View style={tableStyle.cell}>
             {children}
         </View>
     );

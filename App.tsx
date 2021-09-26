@@ -1,6 +1,6 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC, useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
+import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell } from "./components/Table";
 import Header from "./components/Header";
@@ -16,7 +16,7 @@ const App: FC<{}> = () => {
     const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
     const addTask = (newTaskData: TaskData): void => {
         const newTaskDatas = [...taskDatas, newTaskData];
-        const sortedNewTaskDatas = newTaskDatas.sort((a, b) => a.deadline - b.deadline);
+        const sortedNewTaskDatas = newTaskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline);
         setTaskDatas(sortedNewTaskDatas);
     }
     const changeDone = (id: string) => {
@@ -24,16 +24,16 @@ const App: FC<{}> = () => {
         setTaskDatas(newData);
     }
     const deleteTask = (id: string) => {
-        const newData = taskDatas.filter((e) => e.id !== id);
+        const newData = taskDatas.filter((taskData: TaskData) => taskData.id !== id);
         setTaskDatas(newData);
     }
     const addEveryTask = (newEveryTaskData: EveryTaskData): void => {
         const newEveryDataTasks = [...everyTaskDatas, newEveryTaskData];
-        const sortedNewEveryDataTasks = newEveryDataTasks.sort((a, b) => a.addDay - b.addDay);
+        const sortedNewEveryDataTasks = newEveryDataTasks.sort((a: EveryTaskData, b: EveryTaskData) => a.addDay - b.addDay);
         setEveryTaskDatas(sortedNewEveryDataTasks);
     }
     const deleteEveryTask = (id: string) => {
-        const newData = everyTaskDatas.filter((e) => e.id !== id);
+        const newData = everyTaskDatas.filter((everyTaskData: EveryTaskData) => everyTaskData.id !== id);
         setEveryTaskDatas(newData);
     }
     const dataClear = () => {
@@ -172,14 +172,5 @@ const App: FC<{}> = () => {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
 
 export default App;

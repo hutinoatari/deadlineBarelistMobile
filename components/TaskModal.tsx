@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, Modal, Text, TextInput, Button, View, Alert } from 'react-native';
+import { Modal, Text, TextInput, Button, View, Alert } from 'react-native';
 import { TaskData } from "../types/data";
 import { generateRandomString } from "../utils/util";
 import { Picker } from "@react-native-picker/picker";
+import { formStyle } from "../styles/formStyle";
 
 interface Props {
     visible: boolean;
@@ -41,12 +42,7 @@ const TaskModal: FC<Props> = ({
                     <TextInput
                         value={taskName}
                         onChangeText={setTaskName}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     />
                 </View>
                 <View style={{
@@ -56,12 +52,7 @@ const TaskModal: FC<Props> = ({
                     <Picker
                         selectedValue={selectedYear}
                         onValueChange={(value) => setSelectedYear(value)}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     >
                         {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
                     </Picker>
@@ -69,12 +60,7 @@ const TaskModal: FC<Props> = ({
                     <Picker
                         selectedValue={selectedMonth}
                         onValueChange={(value) => setSelectedMonth(value)}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     >
                         {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
                     </Picker>
@@ -82,12 +68,7 @@ const TaskModal: FC<Props> = ({
                     <Picker
                         selectedValue={selectedDate}
                         onValueChange={(value) => setSelectedDate(value)}
-                        style={{
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            padding: 0,
-                            flex: 1,
-                        }}
+                        style={formStyle.fillInput}
                     >
                         {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
                     </Picker>
