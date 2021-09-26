@@ -1,6 +1,6 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC, useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Text, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell } from "./components/Table";
 import Header from "./components/Header";
@@ -79,8 +79,17 @@ const App: FC<{}> = () => {
                 <Text style={{fontWeight: "bold"}}>課題リスト</Text>
                 <Button title="更新する" onPress={() => setTodayUNIXTime(new Date().getTime())} />
                 <Button title="終了済の課題を全削除" onPress={() => {
-                    const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < todayUNIXTime) && taskData.isDone));
-                    setTaskDatas(newData);
+                    Alert.alert(
+                        "注意！",
+                        "本当に削除しますか？(1度削除したデータは戻せません)",
+                        [
+                            {text: "削除する", onPress: () => {
+                                const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < todayUNIXTime) && taskData.isDone));
+                                setTaskDatas(newData);
+                            }},
+                            {text: "やめる", style: "cancel"}
+                        ]
+                    );
                 }} color="red" />
                 <ScrollView>
                     <Table>
@@ -108,7 +117,16 @@ const App: FC<{}> = () => {
                                         </View>
                                     </View>
                                 </Cell>
-                                <Cell><Button title="削除" onPress={() => deleteTask(taskData.id)} color="red" /></Cell>
+                                <Cell><Button title="削除" onPress={() => {
+                                    Alert.alert(
+                                        "注意！",
+                                        `${taskData.name}を本当に削除しますか？(1度削除したデータは戻せません)`,
+                                        [
+                                            {text: "削除する", onPress: () => {deleteTask(taskData.id)}},
+                                            {text: "やめる", style: "cancel"}
+                                        ]
+                                    );
+                                }} color="red" /></Cell>
                             </Row>
                         )}
                     </Table>

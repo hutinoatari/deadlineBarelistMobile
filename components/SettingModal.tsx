@@ -23,7 +23,16 @@ const SettingModal: FC<Props> = ({
                 backgroundColor: "#aaaaff",
             }}>
                 <Text style={{fontWeight: "bold"}}>設定</Text>
-                <Button title="キャッシュを含めて全削除" onPress={dataClear} color="red" />
+                <Button title="キャッシュを含めて全削除" onPress={() => {
+                    Alert.alert(
+                        "注意！",
+                        "本当に削除しますか？(1度削除したデータは戻せません)",
+                        [
+                            {text: "削除する", onPress: () => {dataClear()}},
+                            {text: "やめる", style: "cancel"}
+                        ]
+                    );
+                }} color="red" />
             </View>
         </Modal>
     );
