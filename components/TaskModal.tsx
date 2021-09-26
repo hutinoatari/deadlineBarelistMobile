@@ -37,7 +37,6 @@ const TaskModal: FC<Props> = ({
             visible={visible}
             onRequestClose={onRequestClose}
             animationType="slide"
-            onDismiss={formInit}
         >
             <View style={modalStyle.background}>
                 <View style={{flex: 1}}>

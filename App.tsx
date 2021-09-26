@@ -77,7 +77,7 @@ const App: FC<{}> = () => {
         <SafeAreaView style={{
             flex: 1,
             paddingTop: StatusBar.currentHeight,
-            backgroundColor: "lightgray",
+            backgroundColor: "oldlace",
         }}>
             <ExpoStatusBar />
 
