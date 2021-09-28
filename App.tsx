@@ -79,14 +79,16 @@ const App: FC<{}> = () => {
     }
 
     useEffect(() => {
-        AsyncStorage.getItem("task").then((json) => {if(json) setTaskDatas(JSON.parse(json))});
-        AsyncStorage.getItem("everyTask").then((json) => {if(json) setEveryTaskDatas(JSON.parse(json))});
-        AsyncStorage.getItem("lastUpdate").then((json) => {
-            if(json){
-                setLastUpdateUNIXTime(JSON.parse(json));
-                taskDataUpdate();
-                setLastUpdateUNIXTime(nowUNIXDateTime);
-            }
+        AsyncStorage.getItem("task").then((json) => {if(json) setTaskDatas(JSON.parse(json))})
+        .finally(() => {AsyncStorage.getItem("everyTask").then((json) => {if(json) setEveryTaskDatas(JSON.parse(json))})})
+        .finally(() => {
+            AsyncStorage.getItem("lastUpdate").then((json) => {
+                if(json){
+                    setLastUpdateUNIXTime(JSON.parse(json));
+                    taskDataUpdate();
+                    setLastUpdateUNIXTime(nowUNIXDateTime);
+                }
+            });
         });
     },[]);
     useEffect(() => {
