@@ -12,7 +12,7 @@ import { viewStyle } from "../styles/viewStyle";
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
-    nowUNIXTime: number;
+    nowUNIXDateTime: number;
     everyTaskDatas: EveryTaskData[];
     addEveryTask: (newEveryTaskData: EveryTaskData) => void;
     deleteEveryTask: (id: string) => void;
@@ -21,12 +21,12 @@ interface Props {
 const EveryTaskModal: FC<Props> = ({
     visible,
     onRequestClose,
-    nowUNIXTime,
+    nowUNIXDateTime,
     everyTaskDatas,
     addEveryTask,
     deleteEveryTask,
 }) => {
-    const nowDate = new Date(nowUNIXTime);
+    const nowDate = new Date(nowUNIXDateTime);
     const [everyTaskName, setEveryTaskName] = useState<string>("");
     const [selectedAddDay, setSelectedAddDay] = useState<number>(nowDate.getDay());
     const [grace, setGrace] = useState<string>(""+7);
@@ -59,7 +59,7 @@ const EveryTaskModal: FC<Props> = ({
                     <View style={formStyle.fillInput}>
                         <Picker
                             selectedValue={selectedAddDay}
-                            onValueChange={(value) => setSelectedAddDay(value)}
+                            onValueChange={(value: number) => setSelectedAddDay(value)}
                         >
                             {dayString.map((day: string, i: number) => <Picker.Item key={i} label={day} value={i} />)}
                         </Picker>

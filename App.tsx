@@ -1,7 +1,6 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, { FC, useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
-import Storage from "react-native-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell, CellHead } from "./components/Table";
 import Header from "./components/Header";
@@ -10,22 +9,20 @@ import TaskModal from "./components/TaskModal";
 import EveryTaskModal from "./components/EveryTaskModal";
 import SettingModal from "./components/SettingModal";
 import { TaskData, EveryTaskData } from "./types/data";
-import { UNIXTimeToYYYYMMDD } from "./utils/util";
+import { UNIXTimeToYYYYMMDD, UNIXTimeToUNIXDateTime, generateRandomString } from "./utils/util";
 import { textStyle } from "./styles/textStyle";
 import { viewStyle } from "./styles/viewStyle";
-
-const storage: Storage = new Storage({
-    size: 1024,
-    storageBackend: AsyncStorage,
-    defaultExpires: null,
-    enableCache: true,
-});
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
     const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
     const addTask = (newTaskData: TaskData): void => {
         const newTaskDatas = [...taskDatas, newTaskData];
+        const sortedNewTaskDatas = newTaskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline);
+        setTaskDatas(sortedNewTaskDatas);
+    }
+    const addTasks = (newTaskDataArray: TaskData[]): void => {
+        const newTaskDatas = [...taskDatas, ...newTaskDataArray];
         const sortedNewTaskDatas = newTaskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline);
         setTaskDatas(sortedNewTaskDatas);
     }
@@ -49,31 +46,62 @@ const App: FC<{}> = () => {
     const dataAllClear = () => {
         setTaskDatas([]);
         setEveryTaskDatas([]);
-        storage.remove({key: "task"});
-        storage.remove({key: "everyTask"});
+        AsyncStorage.clear();
     };
 
-    const [nowUNIXTime, setNowUNIXTime] = useState<number>(new Date().getTime());
+    const [nowUNIXDateTime, setNowUNIXDateTime] = useState<number>(UNIXTimeToUNIXDateTime(new Date().getTime()));
+    const [lastUpdateUNIXTime, setLastUpdateUNIXTime] = useState<number>(UNIXTimeToUNIXDateTime(new Date().getTime()));
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
     const [everyTaskModalVisible, setEveryTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
+    const taskDataUpdate = () => {
+        const dateSecond = 86400000;
+        const newTasks = [];
+        for(let n=lastUpdateUNIXTime; n<nowUNIXDateTime; n+=dateSecond){
+            const date = new Date(n);
+            const y = date.getFullYear();
+            const m = date.getMonth();
+            const d = date.getDate();
+            const day = date.getDay();
+            for(const everyTaskData of everyTaskDatas){
+                if(everyTaskData.addDay !== day) continue;
+                const deadline = new Date(y, m, d+everyTaskData.grace).getTime();
+                newTasks.push({
+                    id: generateRandomString(),
+                    name: everyTaskData.name,
+                    deadline: deadline,
+                    isDone: false,
+                });
+            }
+        }
+        addTasks(newTasks);
+    }
+
     useEffect(() => {
-        storage.load({key: "task"}).then((data: TaskData[]) => setTaskDatas(data));
-        storage.load({key: "everyTask"}).then((data: EveryTaskData[]) => setEveryTaskDatas(data));
+        AsyncStorage.getItem("task").then((json) => {if(json) setTaskDatas(JSON.parse(json))});
+        AsyncStorage.getItem("everyTask").then((json) => {if(json) setEveryTaskDatas(JSON.parse(json))});
+        AsyncStorage.getItem("lastUpdate").then((json) => {
+            if(json){
+                setLastUpdateUNIXTime(JSON.parse(json));
+                taskDataUpdate();
+                setLastUpdateUNIXTime(nowUNIXDateTime);
+            }
+        });
     },[]);
     useEffect(() => {
-        storage.save({
-            key: "task",
-            data: taskDatas
-        });
+        AsyncStorage.setItem("task", JSON.stringify(taskDatas));
     }, [taskDatas]);
     useEffect(() => {
-        storage.save({
-            key: "everyTask",
-            data: everyTaskDatas
-        });
+        AsyncStorage.setItem("everyTask", JSON.stringify(everyTaskDatas));
     }, [everyTaskDatas]);
+    useEffect(() => {
+        AsyncStorage.setItem("lastUpdate", JSON.stringify(lastUpdateUNIXTime));
+    }, [lastUpdateUNIXTime]);
+    useEffect(() => {
+        taskDataUpdate();
+        setLastUpdateUNIXTime(nowUNIXDateTime);
+    }, [nowUNIXDateTime]);
 
     return (
         <SafeAreaView style={[{
@@ -99,7 +127,7 @@ const App: FC<{}> = () => {
                 <Text style={textStyle.heading2}>課題リスト</Text>
                 <View style={viewStyle.row}>
                     <View style={viewStyle.fat}>
-                        <Button title="更新する" onPress={() => setNowUNIXTime(new Date().getTime())} />
+                        <Button title="更新する" onPress={() => setNowUNIXDateTime(UNIXTimeToUNIXDateTime(new Date().getTime()))} />
                     </View>
                     <View style={viewStyle.fat}>
                         <Button title="完了課題を削除" onPress={() => {
@@ -108,7 +136,7 @@ const App: FC<{}> = () => {
                                 "本当に削除しますか？\n(1度削除したデータは戻せません)",
                                 [
                                     {text: "削除する", onPress: () => {
-                                        const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXTime) && taskData.isDone));
+                                        const newData = taskDatas.filter((taskData: TaskData) => !((taskData.deadline < nowUNIXDateTime) && taskData.isDone));
                                         setTaskDatas(newData);
                                     }},
                                     {text: "やめる", style: "cancel"}
@@ -132,7 +160,7 @@ const App: FC<{}> = () => {
                             <Row key={taskData.id}>
                                 <Cell><Text>{taskData.name}</Text></Cell>
                                 <Cell>
-                                    <Text style={{color: ((taskData.deadline < nowUNIXTime) && !taskData.isDone) ? "red" : "black"}}>
+                                    <Text style={{color: ((taskData.deadline < nowUNIXDateTime) && !taskData.isDone) ? "red" : "black"}}>
                                         {UNIXTimeToYYYYMMDD(taskData.deadline)}
                                     </Text>
                                 </Cell>
@@ -165,14 +193,14 @@ const App: FC<{}> = () => {
             <TaskModal
                 visible={taskModalVisible}
                 onRequestClose={() => setTaskModalVisible(false)}
-                nowUNIXTime={nowUNIXTime}
+                nowUNIXDateTime={nowUNIXDateTime}
                 addTask={addTask}
             />
 
             <EveryTaskModal
                 visible={everyTaskModalVisible}
                 onRequestClose={() => setEveryTaskModalVisible(false)}
-                nowUNIXTime={nowUNIXTime}
+                nowUNIXDateTime={nowUNIXDateTime}
                 everyTaskDatas={everyTaskDatas}
                 addEveryTask={addEveryTask}
                 deleteEveryTask={deleteEveryTask}

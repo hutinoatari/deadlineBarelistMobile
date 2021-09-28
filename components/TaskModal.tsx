@@ -11,17 +11,17 @@ import { viewStyle } from "../styles/viewStyle";
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
-    nowUNIXTime: number;
+    nowUNIXDateTime: number;
     addTask: (newTaskData :TaskData) => void;
 }
 
 const TaskModal: FC<Props> = ({
     visible,
     onRequestClose,
-    nowUNIXTime,
+    nowUNIXDateTime,
     addTask,
 }) => {
-    const nowDate = new Date(nowUNIXTime);
+    const nowDate = new Date(nowUNIXDateTime);
     const [taskName, setTaskName] = useState<string>("");
     const [selectedYear, setSelectedYear] = useState<number>(nowDate.getFullYear());
     const [selectedMonth, setSelectedMonth] = useState<number>(nowDate.getMonth());
@@ -57,7 +57,7 @@ const TaskModal: FC<Props> = ({
                         <View style={formStyle.fillInput}>
                             <Picker
                                 selectedValue={selectedYear}
-                                onValueChange={(value) => setSelectedYear(value)}
+                                onValueChange={(value: number) => setSelectedYear(value)}
                             >
                                 {[...Array(3)].map((_: undefined, i: number) => i+nowDate.getFullYear()-1).map((year: number, j:number) => <Picker.Item key={j} label={""+year} value={year} />)}
                             </Picker>
@@ -66,7 +66,7 @@ const TaskModal: FC<Props> = ({
                         <View style={formStyle.fillInput}>
                             <Picker
                                 selectedValue={selectedMonth}
-                                onValueChange={(value) => setSelectedMonth(value)}
+                                onValueChange={(value: number) => setSelectedMonth(value)}
                             >
                                 {[...Array(12)].map((_: undefined, i: number) => i).map((month: number, j: number) => <Picker.Item key={j} label={""+(month+1)} value={month} />)}
                             </Picker>
@@ -75,7 +75,7 @@ const TaskModal: FC<Props> = ({
                         <View style={formStyle.fillInput}>
                             <Picker
                                 selectedValue={selectedDate}
-                                onValueChange={(value) => setSelectedDate(value)}
+                                onValueChange={(value: number) => setSelectedDate(value)}
                             >
                                 {[...Array(31)].map((_: undefined, i: number) => i+1).map((date: number, j: number) => <Picker.Item key={j} label={""+date} value={date} />)}
                             </Picker>

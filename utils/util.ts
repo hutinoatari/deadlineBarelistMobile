@@ -18,4 +18,14 @@ const generateRandomString = (): string => {
 
 const dayString = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
 
-export { UNIXTimeToYYYYMMDD, generateRandomString, dayString };
+const UNIXTimeToUNIXDateTime = (UNIXTime: number): number => {
+    const date = new Date(UNIXTime);
+    const y = date.getFullYear();
+    const m = date.getMonth();
+    const d = date.getDate();
+    const newDate = new Date(y, m, d);
+    const UNIXDateTime = newDate.getTime();
+    return UNIXDateTime;
+}
+
+export { UNIXTimeToYYYYMMDD, generateRandomString, dayString, UNIXTimeToUNIXDateTime };
