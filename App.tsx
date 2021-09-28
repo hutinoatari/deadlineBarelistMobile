@@ -1,5 +1,5 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useLayoutEffect } from 'react';
 import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell, CellHead } from "./components/Table";
@@ -50,7 +50,7 @@ const App: FC<{}> = () => {
     };
 
     const [nowUNIXDateTime, setNowUNIXDateTime] = useState<number>(UNIXTimeToUNIXDateTime(new Date().getTime()));
-    const [lastUpdateUNIXTime, setLastUpdateUNIXTime] = useState<number>(UNIXTimeToUNIXDateTime(new Date().getTime()));
+    const [lastUpdateUNIXTime, setLastUpdateUNIXTime] = useState<number>(nowUNIXDateTime);
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
     const [everyTaskModalVisible, setEveryTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
@@ -76,20 +76,16 @@ const App: FC<{}> = () => {
             }
         }
         addTasks(newTasks);
+        setLastUpdateUNIXTime(nowUNIXDateTime);
     }
 
+    useLayoutEffect(() => {
+        AsyncStorage.getItem("task").then((json) => setTaskDatas(json ? JSON.parse(json) : []));
+        AsyncStorage.getItem("everyTask").then((json) => setEveryTaskDatas(json ? JSON.parse(json) : []));
+        AsyncStorage.getItem("lastUpdate").then((json) => setLastUpdateUNIXTime(json ? JSON.parse(json) : nowUNIXDateTime));
+    }, []);
     useEffect(() => {
-        AsyncStorage.getItem("task").then((json) => {if(json) setTaskDatas(JSON.parse(json))})
-        .finally(() => {AsyncStorage.getItem("everyTask").then((json) => {if(json) setEveryTaskDatas(JSON.parse(json))})})
-        .finally(() => {
-            AsyncStorage.getItem("lastUpdate").then((json) => {
-                if(json){
-                    setLastUpdateUNIXTime(JSON.parse(json));
-                    taskDataUpdate();
-                    setLastUpdateUNIXTime(nowUNIXDateTime);
-                }
-            });
-        });
+        taskDataUpdate();
     },[]);
     useEffect(() => {
         AsyncStorage.setItem("task", JSON.stringify(taskDatas));
@@ -102,7 +98,6 @@ const App: FC<{}> = () => {
     }, [lastUpdateUNIXTime]);
     useEffect(() => {
         taskDataUpdate();
-        setLastUpdateUNIXTime(nowUNIXDateTime);
     }, [nowUNIXDateTime]);
 
     return (
