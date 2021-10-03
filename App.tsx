@@ -1,5 +1,5 @@
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import React, { FC, useState, useEffect, useLayoutEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, View, ScrollView, Text, Button, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Table, Row, Cell, CellHead } from "./components/Table";
@@ -15,7 +15,9 @@ import { viewStyle } from "./styles/viewStyle";
 
 const App: FC<{}> = () => {
     const [taskDatas, setTaskDatas] = useState<TaskData[]>([]);
+    const [isTaskDatasLoaded, setIsTaskDatasLoaded] = useState<boolean>(false);
     const [everyTaskDatas, setEveryTaskDatas] = useState<EveryTaskData[]>([]);
+    const [isEveryTaskDatasLoaded, setIsEveryTaskDatasLoaded] = useState<boolean>(false);
     const addTask = (newTaskData: TaskData): void => {
         const newTaskDatas = [...taskDatas, newTaskData];
         const sortedNewTaskDatas = newTaskDatas.sort((a: TaskData, b: TaskData) => a.deadline - b.deadline);
@@ -51,11 +53,14 @@ const App: FC<{}> = () => {
 
     const [nowUNIXDateTime, setNowUNIXDateTime] = useState<number>(UNIXTimeToUNIXDateTime(new Date().getTime()));
     const [lastUpdateUNIXTime, setLastUpdateUNIXTime] = useState<number>(nowUNIXDateTime);
+    const [isLastUpdateUNIXTimeLoaded, setIsLastUpdateUNIXTimeLoaded] = useState<boolean>(false);
     const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
     const [everyTaskModalVisible, setEveryTaskModalVisible] = useState<boolean>(false);
     const [settingModalVisible, setSettingModalVisible] = useState<boolean>(false);
 
     const taskDataUpdate = () => {
+        if(lastUpdateUNIXTime === nowUNIXDateTime) return;
+
         const dateSecond = 86400000;
         const newTasks = [];
         for(let n=lastUpdateUNIXTime; n<=nowUNIXDateTime; n+=dateSecond){
@@ -79,14 +84,14 @@ const App: FC<{}> = () => {
         setLastUpdateUNIXTime(nowUNIXDateTime);
     }
 
-    useLayoutEffect(() => {
-        AsyncStorage.getItem("task").then((json) => setTaskDatas(json ? JSON.parse(json) : []));
-        AsyncStorage.getItem("everyTask").then((json) => setEveryTaskDatas(json ? JSON.parse(json) : []));
-        AsyncStorage.getItem("lastUpdate").then((json) => setLastUpdateUNIXTime(json ? JSON.parse(json) : nowUNIXDateTime));
+    useEffect(() => {
+        AsyncStorage.getItem("task").then((json) => setTaskDatas(json ? JSON.parse(json) : [])).finally(() => setIsTaskDatasLoaded(true));
+        AsyncStorage.getItem("everyTask").then((json) => setEveryTaskDatas(json ? JSON.parse(json) : [])).finally(() => setIsEveryTaskDatasLoaded(true));
+        AsyncStorage.getItem("lastUpdate").then((json) => setLastUpdateUNIXTime(json ? JSON.parse(json) : nowUNIXDateTime)).finally(() => setIsLastUpdateUNIXTimeLoaded(true));
     }, []);
     useEffect(() => {
-        taskDataUpdate();
-    },[]);
+        if(isTaskDatasLoaded && isEveryTaskDatasLoaded && isLastUpdateUNIXTimeLoaded) taskDataUpdate();
+    },[isTaskDatasLoaded, isEveryTaskDatasLoaded, isLastUpdateUNIXTimeLoaded]);
     useEffect(() => {
         AsyncStorage.setItem("task", JSON.stringify(taskDatas));
     }, [taskDatas]);
