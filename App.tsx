@@ -63,7 +63,7 @@ const App: FC<{}> = () => {
 
         const dateSecond = 86400000;
         const newTasks = [];
-        for(let n=lastUpdateUNIXTime; n<=nowUNIXDateTime; n+=dateSecond){
+        for(let n=lastUpdateUNIXTime+dateSecond; n<=nowUNIXDateTime; n+=dateSecond){
             const date = new Date(n);
             const y = date.getFullYear();
             const m = date.getMonth();
